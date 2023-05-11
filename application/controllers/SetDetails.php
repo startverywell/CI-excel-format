@@ -6,6 +6,13 @@ class SetDetails extends CI_Controller {
 	public function __construct()
     {
         parent::__construct();
+        $this->load->database();
+        $this->load->helper('url');
+        $this->load->library('session');
+        $this->load->library('form_validation');        
+		$this->load->model('Container_model');
+        $this->load->model('Shipment_model');
+        $this->load->model('Details_model');
     }
 
 
@@ -15,43 +22,72 @@ class SetDetails extends CI_Controller {
 		$this->load->view('setdetails/index');
 		$this->load->view('layout/footer');
 	}
+
+    public function inputData($container_id)
+	{
+        $container = $this->Container_model->getContainer($container_id)[0];
+        $data = array(
+            'header_title' => $container->shipment_name.':'.$container->name, 
+            'container_id' => $container_id
+        );
+		$this->load->view('layout/header');
+		$this->load->view('setdetails/input', $data);
+		$this->load->view('layout/footer');
+	}
     
 
 	// set header
 	public function save()
     {
-        /* Load form helper */ 
-        $this->load->helper(array('form'));
-			
-        /* Load form validation library */ 
-        $this->load->library('form_validation');
-           
-        /* Set validation rule for name field in the form */ 
-        $this->form_validation->set_rules('date_entered', 'DATE ENTERED', 'required'); 
-        $this->form_validation->set_rules('shipment_type', 'SHIPMENT TYPE', 'required'); 
-        $this->form_validation->set_rules('factory', 'Factory name', 'required'); 
-        $this->form_validation->set_rules('carrier', 'CARRIER', 'required'); 
-        $this->form_validation->set_rules('bl', 'BL#', 'required'); 
-        $this->form_validation->set_rules('bill_date', 'BILL/INV DATE', 'required'); 
-        $this->form_validation->set_rules('doc_date', 'DOCS RCVD DATE', 'required'); 
-        $this->form_validation->set_rules('bill', 'Bill#', 'required'); 
-        $this->form_validation->set_rules('amount', 'Amount', 'required');
-           
-        if ($this->form_validation->run() == FALSE) { 
-            $this->load->view('layout/header');
-            $this->load->view('setheader/index');
-            $this->load->view('layout/footer');
-        } 
-        else { 
-           $_SESSION['date_entered']  = $_POST['date_entered'] ;
-           $_SESSION['shipment_type'] = $_POST['shipment_type'] ;
-           $_SESSION['factory']       = $_POST['factory'] ;
-           $_SESSION['carrier']       = $_POST['carrier'] ;
-           $_SESSION['bl']            = $_POST['bl'] ;
-           $_SESSION['bill_date']     = $_POST['bill_date'] ;
-           $_SESSION['doc_date']      = $_POST['doc_date'] ;
-           $_SESSION['bill']          = $_POST['bill'] ;
-           $_SESSION['amount']        = $_POST['amount'] ;
-        } 
-	}
+        $header = [
+            0 => 'po',
+            1 => 'style',
+            2 => 'description',
+            3 => 'hts',
+            4 => 'pcs_carton',
+            5 => 'ctn',
+            6 => 'total',
+            7 => 'uom',
+            8 => 'ds',
+            9 => 'customer',
+            10 => 'ship',
+            11 => 'cancel',
+            12 => 'customer_po',
+            13 => 'so',
+            14 => 'inv',
+            15 => 'ext_req',
+            16 => 'rcvd',
+            17 => 'short_over',
+            18 => 'notes',
+            19 => 'upc',
+            20 => 'length',
+            21 => 'width',
+            22 => 'height',
+            23 => 'weight',
+            24 => 'cbm',
+            25 => 'price'
+        ];
+        $container_id = $this->input->post('container_id');
+        $shipment_id = ($this->Container_model->getContainer($container_id)[0])->shipment_id;
+        $data = json_decode($this->input->post('data'));
+        $new_data = [];
+        $detail_data = [];
+
+        foreach ($data as $key => $row) {
+            $new_data[$row->row][$row->col] = $row->newValue ?? '';
+        }
+        // var_export($new_data); die;
+        foreach ($new_data as $key => $value) {
+            $detail_data['container_id'] = $container_id;
+            $detail_data['shipment_id'] = $shipment_id;
+            foreach ($value as $key1 => $row) {
+                $detail_data[$header[$key1]] = $row ?? '';
+            }
+            $this->Details_model->createDetails($detail_data);
+            $detail_data = [];
+        }
+
+        $this->session->set_flashdata('msg_noti', 'Success create Container');
+        redirect('setdetails');
+    }
 }

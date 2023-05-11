@@ -10,6 +10,8 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="<?php echo base_url();?>public/css/styles.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="<?php echo base_url();?>public/css/gc.spread.sheets.excel2013white.min.css">
+        <script src="<?php echo base_url();?>public/js/gc.spread.sheets.all.min.js"></script>
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <script> var base_url = '<?= site_url();?>'; </script>
@@ -66,23 +68,25 @@
                 </nav>
             </div>
             <div id="layoutSidenav_content">
-                <!-- alert -->
-                <?php
-                    if ($this->session->flashdata('msg_noti') != '') {
-                        echo 
-                            '<div class="alert alert-success">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                <p>' . $this->session->flashdata('msg_noti') . '</p>
-                            </div>';
-                    } 
-                    if ($this->session->flashdata('msg_error') != '') {
-                        echo 
-                            '<div class="alert alert-danger">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                <p>'. $this->session->flashdata('msg_error') . '</p>   
-                            </div>';
-                    }
-                    
-                ?>
-                <!-- /. alert -->
+                <main>
+                    <div class="container-fluid px-4">
+                        <!-- alert -->
+                        <?php
+                            if ($this->session->flashdata('msg_noti') != '') {
+                                echo 
+                                    '<div class="alert alert-success">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        <p>' . $this->session->flashdata('msg_noti') . '</p>
+                                    </div>';
+                            } 
+                            if ($this->session->flashdata('msg_error') != '') {
+                                echo 
+                                    '<div class="alert alert-danger">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        <p>'. $this->session->flashdata('msg_error') . '</p>   
+                                    </div>';
+                            }
+                            
+                        ?>
+                        <!-- /. alert -->
                 

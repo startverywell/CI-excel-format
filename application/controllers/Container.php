@@ -6,13 +6,37 @@ class Container extends CI_Controller {
 	public function __construct()
     {
         parent::__construct();
+        $this->load->database();
+        $this->load->helper('url');
+        $this->load->library('session');
+        $this->load->library('form_validation');        
+		$this->load->model('Shipment_model');
+        $this->load->model('Container_model');
     }
 
 
 	public function index()
 	{
+        $data = array(
+            'containerList' => $this->Container_model->getindex(), 
+        );
 		$this->load->view('layout/header');
-		$this->load->view('setdetails/index');
+		$this->load->view('container/index', $data);
+		$this->load->view('layout/footer');
+	}
+
+    public function create()
+	{
+        
+        foreach ($this->Shipment_model->getindex() as $row) {
+            $options[$row->id] = $row->name;
+        }
+
+        $data = array(
+            'options' => $options, 
+        );
+        $this->load->view('layout/header');
+		$this->load->view('container/create', $data);
 		$this->load->view('layout/footer');
 	}
     
@@ -27,31 +51,22 @@ class Container extends CI_Controller {
         $this->load->library('form_validation');
            
         /* Set validation rule for name field in the form */ 
-        $this->form_validation->set_rules('date_entered', 'DATE ENTERED', 'required'); 
-        $this->form_validation->set_rules('shipment_type', 'SHIPMENT TYPE', 'required'); 
-        $this->form_validation->set_rules('factory', 'Factory name', 'required'); 
-        $this->form_validation->set_rules('carrier', 'CARRIER', 'required'); 
-        $this->form_validation->set_rules('bl', 'BL#', 'required'); 
-        $this->form_validation->set_rules('bill_date', 'BILL/INV DATE', 'required'); 
-        $this->form_validation->set_rules('doc_date', 'DOCS RCVD DATE', 'required'); 
-        $this->form_validation->set_rules('bill', 'Bill#', 'required'); 
-        $this->form_validation->set_rules('amount', 'Amount', 'required');
+        $this->form_validation->set_rules('shipment_id', 'SHIPMENT NAME', 'required'); 
+        $this->form_validation->set_rules('name', 'CONTAINER NAME', 'required'); 
+        
            
         if ($this->form_validation->run() == FALSE) { 
-            $this->load->view('layout/header');
-            $this->load->view('setheader/index');
-            $this->load->view('layout/footer');
+            $this->session->set_flashdata('msg_error', validation_errors());
+            redirect('container/create');
         } 
         else { 
-           $_SESSION['date_entered']  = $_POST['date_entered'] ;
-           $_SESSION['shipment_type'] = $_POST['shipment_type'] ;
-           $_SESSION['factory']       = $_POST['factory'] ;
-           $_SESSION['carrier']       = $_POST['carrier'] ;
-           $_SESSION['bl']            = $_POST['bl'] ;
-           $_SESSION['bill_date']     = $_POST['bill_date'] ;
-           $_SESSION['doc_date']      = $_POST['doc_date'] ;
-           $_SESSION['bill']          = $_POST['bill'] ;
-           $_SESSION['amount']        = $_POST['amount'] ;
+            if ($this->Container_model->createContainer($this->input->post())  ) {
+                $this->session->set_flashdata('msg_noti', 'Success create Container');
+                redirect('container');
+            } else {
+                $this->session->set_flashdata('msg_error', 'save error');
+                redirect('container/create');
+            }
         } 
 	}
 }
