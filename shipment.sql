@@ -11,7 +11,7 @@
  Target Server Version : 100137 (10.1.37-MariaDB)
  File Encoding         : 65001
 
- Date: 10/05/2023 12:31:54
+ Date: 12/05/2023 01:07:17
 */
 
 SET NAMES utf8mb4;
@@ -33,7 +33,12 @@ CREATE TABLE `container`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `shipment_foregin`(`shipment_id` ASC) USING BTREE,
   CONSTRAINT `shipment_foregin` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of container
+-- ----------------------------
+INSERT INTO `container` VALUES (5, 6, 'FGCXU5053182 - 5721', 0, NULL, 0, NULL, 1);
 
 -- ----------------------------
 -- Table structure for shipment
@@ -54,7 +59,12 @@ CREATE TABLE `shipment`  (
   `out_3_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Receiver Upload',
   `out_4_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'PL S',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of shipment
+-- ----------------------------
+INSERT INTO `shipment` VALUES (6, 'S#F5100', 'CI#23WYBG107 (1).xlsx', 'FINAL PACKING LIST  23WYBG107.xlsx', 'MASTER FILE IMPORT FILE - #XXXX 10.12.22 - CONT.xls', NULL, NULL, NULL, 1, 'SHIPMENT FILE   S#F5100.xlsx', 'Receiver Upload S#F5100- Cont .xlsx', 'MASTER FILE IMPORT FILE - S#F5100- Cont .xlsx', 'PL S#F5100 Cont S#F5100.xlsx');
 
 -- ----------------------------
 -- Table structure for shipment_details
@@ -75,10 +85,13 @@ CREATE TABLE `shipment_details`  (
   `ds` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'DS',
   `customer` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Customer',
   `ship` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'ship',
+  `cancel` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'CANCEL',
+  `customer_po` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'CUSTOMER PO',
   `inv` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'INV',
   `ext_req` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'EXT_REQ',
   `rcvd` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'RCVD',
   `short_over` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'SHORT/OVER',
+  `so` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'SO',
   `notes` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'NOTES',
   `upc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'UPC',
   `length` double NULL DEFAULT NULL COMMENT 'Length',
@@ -88,12 +101,21 @@ CREATE TABLE `shipment_details`  (
   `cbm` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'CBM',
   `price` decimal(10, 2) NULL DEFAULT NULL COMMENT 'PRICE',
   `show_flag` int NOT NULL DEFAULT 1 COMMENT '1-show 0-hide',
+  `pl_new` int NOT NULL DEFAULT 0 COMMENT '0-old, 1-new',
+  `asst` int UNSIGNED NULL DEFAULT 0 COMMENT '0-non active, 1-active',
+  `single_top` int NULL DEFAULT 0 COMMENT '0-non active, 1-active',
+  `multi_top` int NULL DEFAULT 0 COMMENT '0-non active, 1-active',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `container_forgin`(`container_id` ASC) USING BTREE,
   INDEX `shipment`(`shipment_id` ASC) USING BTREE,
   CONSTRAINT `container_forgin` FOREIGN KEY (`container_id`) REFERENCES `container` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `shipment` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of shipment_details
+-- ----------------------------
+INSERT INTO `shipment_details` VALUES (0, 6, 5, '', 'DSM7016FB', '', '', '', '125', '3000', '', '', '', '', '', '', '', '', '', '', '', '', '', 52.3, 2.4, 2.5, 45.3, '', 50.00, 1, 1, 1, 1, 0);
 
 -- ----------------------------
 -- Table structure for shipment_header
@@ -103,7 +125,7 @@ CREATE TABLE `shipment_header`  (
   `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
   `shipment_id` int NOT NULL COMMENT 'shipment id',
   `date_entered` date NULL DEFAULT NULL COMMENT 'DATA ENTERED',
-  `shipment_type` int NOT NULL COMMENT 'SHIPMENT TYPE',
+  `shipment_type` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'SHIPMENT TYPE',
   `factory` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'FACTORY',
   `carrier` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'CARRIERP',
   `bl` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'BL#',
@@ -115,6 +137,28 @@ CREATE TABLE `shipment_header`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `shipment_id`(`shipment_id` ASC) USING BTREE,
   CONSTRAINT `shipment_header_ibfk_1` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of shipment_header
+-- ----------------------------
+INSERT INTO `shipment_header` VALUES (8, 6, '2020-02-01', 'FOB', 'Shandong Winner', 'SB', 'GETR205702K08490', '2020-02-01', '2020-02-01', 'S#5100;21WYBG444', 300, NULL);
+
+-- ----------------------------
+-- Table structure for sku_list
+-- ----------------------------
+DROP TABLE IF EXISTS `sku_list`;
+CREATE TABLE `sku_list`  (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `sku` varbinary(255) NOT NULL COMMENT 'SKU',
+  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'description',
+  `description2` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'description2',
+  `qty` int NULL DEFAULT NULL COMMENT 'packing Uom QTY',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of sku_list
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -54,6 +54,26 @@ class Header_model extends CI_Model {
             return false;
         }
     }
+
+    public function getHeaderbyShipID($id)
+    {
+        $query = $this->db->query(
+            'SELECT 
+                shipment.`name` as shipment_name, 
+                shipment_header.* 
+            from shipment_header 
+            LEFT JOIN shipment 
+                on shipment_header.shipment_id = shipment.id
+            WHERE  shipment_header.shipment_id = '.$id.'  
+            '
+        );
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return false;
+        }
+    }
+
     public function updateHeader($data, $header_id)
     {
         $this->db->trans_start();

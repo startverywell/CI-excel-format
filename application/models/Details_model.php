@@ -17,6 +17,7 @@ class Details_model extends CI_Model {
             return false;
         }
     }
+    
     public function createDetails($data)
     {
         $this->db->trans_start();

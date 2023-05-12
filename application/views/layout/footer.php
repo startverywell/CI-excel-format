@@ -25,5 +25,6 @@
         <script src="<?php echo base_url();?>public/js/resource/details.js"></script>
         <script src="<?php echo base_url();?>public/js/resource/setheader.js"></script>
         <script src="<?php echo base_url();?>public/js/resource/container.js"></script>
+        <script src="<?php echo base_url();?>public/js/resource/generators.js"></script>
     </body>
 </html>
