@@ -33,18 +33,6 @@ class Shipment_model extends CI_Model {
     }
     public function getShipment($shipment_id)
     {
-        $this->db->select('
-            id, 
-            name, 
-            input_1_name,
-            input_2_name,
-            input_3_name,
-            input_4_name,
-            output_1_name,
-            output_2_name,
-            output_3_name,
-            output_4_name
-        ');
         $this->db->from('shipment');
         $this->db->where('id', $shipment_id);
         $query = $this->db->get();

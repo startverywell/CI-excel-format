@@ -7,7 +7,7 @@
     <div class="col-md-3"></div>
     <div class="col-md-3">
         <a class="btn btn-primary" href="./setheader/create">
-            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> 
+            <i class="fa-solid fa-plus" style="color: #40f000;"></i>
             Shipment Headers
         </a>
     </div>
@@ -36,7 +36,20 @@
                         echo '<td>'.$header->date_entered.'</td>';
                         echo '<td>'.$header->shipment_type.'</td>';
                         echo '<td>'.$header->factory.'</td>';
-                        echo '<td><a class="btn btn-primary" href="'.base_url('Dragdrop/read/'.$header->id).'"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Read</a> <a class="btn btn-default" href="'.base_url('Dragdrop/update/'.$header->id).'"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit</a> <a class="btn btn-danger" href="'.base_url('Dragdrop/delete/'.$header->id).'"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete</a></td>';
+                        echo '<td>
+                            <a class="btn" href="./setheader/read/'.$header->id.'">
+                                <i class="fa-solid fa-eye" style="color: green;"></i>  
+                                Read
+                            </a> 
+                            <a class="btn" href="./setheader/edit/'.$header->id.'">
+                                <i class="fa-solid fa-pencil fa-beat-fade" style="color: blue;"></i>
+                                Edit
+                            </a> 
+                            <a class="btn" href="./setheader/delete/'.$header->id.'">
+                                <i class="fa-regular fa-trash-can" style="color: red;"></i> 
+                                Delete
+                            </a>
+                        </td>';
                         echo '</tr>';
                     }
                 }

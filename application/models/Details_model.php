@@ -6,16 +6,11 @@ class Details_model extends CI_Model {
      * You can learn from Codeigniter 3 userguide about active record
      * Reference: https://www.codeigniter.com/userguide3/database/query_builder.html
      */
-	public function getindex()
+	public function getIndex($container_id)
 	{
-        $query = $this->db->query(
-            'SELECT 
-                shipment.`name` as name, 
-                shipment_details.* 
-            from shipment_details 
-            LEFT JOIN shipment 
-                on shipment_details.shipment_id = shipment.id'
-        );
+        $this->db->from('shipment_details');
+        $this->db->where('container_id', $container_id);
+        $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result();
         } else {
@@ -37,17 +32,11 @@ class Details_model extends CI_Model {
         }
     }
 
-    public function getDetails($Details_id)
+    public function getDetails($id)
     {
-        $query = $this->db->query(
-            'SELECT 
-                shipment.`name` as shipment_name, 
-                shipment_details.* 
-            from shipment_details 
-            LEFT JOIN shipment 
-                on shipment_details.shipment_id = shipment.id'
-        )->result_array();
-        
+        $this->db->from('shipment_details');
+        $this->db->where('id', $id);
+        $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result();
         } else {

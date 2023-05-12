@@ -1,31 +1,26 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Container_model extends CI_Model {
+class SkuList_model extends CI_Model {
     /**
      * You can learn from Codeigniter 3 userguide about active record
      * Reference: https://www.codeigniter.com/userguide3/database/query_builder.html
      */
-	public function getindex()
+	public function getIndex()
 	{
-        $query = $this->db->query(
-            'SELECT 
-                shipment.`name` as shipment_name, 
-                container.* 
-            from container 
-            LEFT JOIN shipment 
-                on container.shipment_id = shipment.id'
-        );
+        $this->db->from('sku_list');
+        $query = $this->db->get();
+
         if ($query->num_rows() > 0) {
             return $query->result();
         } else {
             return false;
         }
     }
-    public function createContainer($data)
+    public function createSkuList($data)
     {
         $this->db->trans_start();
-        $this->db->insert('container', $data);
+        $this->db->insert('sku_list', $data);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === FALSE)
@@ -36,18 +31,18 @@ class Container_model extends CI_Model {
             return true;
         }
     }
-    public function getContainer($container_id)
+    public function getSkuList($id)
     {
-        $query = $this->db->query(
-            'SELECT 
-                shipment.`name` as shipment_name, 
-                container.* 
-            from container 
-            LEFT JOIN shipment 
-                on container.shipment_id = shipment.id
-            WHERE container.id = '.$container_id.'
-            '
-        );
+        $this->db->select('
+            id, 
+            sku, 
+            description,
+            description2,
+            qty,
+        ');
+        $this->db->from('sku_list');
+        $this->db->where('id', $id);
+        $query = $this->db->get();
         
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -55,12 +50,11 @@ class Container_model extends CI_Model {
             return false;
         }
     }
-
-    public function updateContainer($data, $container_id)
+    public function updateSkuList($data, $id)
     {
         $this->db->trans_start();
-        $this->db->where('id', $container_id);
-        $this->db->update('container', $data);
+        $this->db->where('id', $id);
+        $this->db->update('sku_list', $data);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === FALSE)
@@ -72,12 +66,11 @@ class Container_model extends CI_Model {
         }
 
     }
-    
-    public function deleteContainer($container_id)
+    public function deleteSkuList($id)
     {
         $this->db->trans_start();
-        $this->db->where('id', $container_id);
-        $this->db->delete('container');
+        $this->db->where('id', $id);
+        $this->db->delete('sku_list');
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === FALSE)
@@ -86,6 +79,19 @@ class Container_model extends CI_Model {
         }
         else {
             return true;
+        }
+    }
+
+    public function checkSku($sku)
+    {
+        $this->db->from('sku_list');
+        $this->db->where('sku', $sku);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

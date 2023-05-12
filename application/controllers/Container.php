@@ -39,6 +39,43 @@ class Container extends CI_Controller {
 		$this->load->view('container/create', $data);
 		$this->load->view('layout/footer');
 	}
+
+    // view funcion
+	public function read($id)
+	{
+		//get data from Member_modal using getindex() methods
+        $data = array(
+            'container' => $this->Container_model->getcontainer($id)[0], 
+        );
+        //load view
+        $this->load->view('layout/header');
+		$this->load->view('container/view', $data);
+		$this->load->view('layout/footer');
+	}
+
+    // edit funcion
+	public function edit($id)
+	{
+        foreach ($this->Shipment_model->getindex() as $row) {
+            $options[$row->id] = $row->name;
+        }
+		//get data from Member_modal using getindex() methods
+        $data = array(
+            'container' => $this->Container_model->getContainer($id)[0], 
+            'options' => $options, 
+        );
+        //load view
+        $this->load->view('layout/header');
+		$this->load->view('container/edit', $data);
+		$this->load->view('layout/footer');
+	}
+
+	public function delete($id)
+	{
+		$this->Container_model->deleteContainer($id);    
+		$this->session->set_flashdata('msg_noti', 'Success Delete Shipment Header');
+		redirect('container/');
+	}
     
 
 	// set header
@@ -66,6 +103,34 @@ class Container extends CI_Controller {
             } else {
                 $this->session->set_flashdata('msg_error', 'save error');
                 redirect('container/create');
+            }
+        } 
+	}
+
+
+    public function update()
+    {
+        /* Load form helper */ 
+        $this->load->helper(array('form'));
+			
+        /* Load form validation library */ 
+        $this->load->library('form_validation');
+           
+        /* Set validation rule for name field in the form */ 
+        $this->form_validation->set_rules('shipment_id', 'SHIPMENT NAME', 'required'); 
+        $this->form_validation->set_rules('name', 'CONTAINER NAME', 'required'); 
+           
+        if ($this->form_validation->run() == FALSE) { 
+            $this->session->set_flashdata('msg_error', validation_errors());
+            redirect('container/edit/'.$this->input->post('id'));
+        } 
+        else { 
+            if ($this->Container_model->updateContainer($this->input->post(), $this->input->post('id'))  ) {
+                $this->session->set_flashdata('msg_noti', 'Success Update Container');
+                redirect('container');
+            } else {
+                $this->session->set_flashdata('msg_error', 'save error');
+                redirect('container/edit/'.$this->input->post('id'));
             }
         } 
 	}

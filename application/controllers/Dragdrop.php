@@ -79,6 +79,25 @@ class Dragdrop extends CI_Controller {
 			redirect('dragdrop/create');
 		}
 	}
+	// view funcion
+	public function read($id)
+	{
+		//get data from Member_modal using getindex() methods
+        $data = array(
+            'shipment' => $this->Shipment_model->getShipment($id)[0], 
+        );
+        //load view
+        $this->load->view('layout/header');
+		$this->load->view('dragdrop/view', $data);
+		$this->load->view('layout/footer');
+	}
+
+	public function delete($id)
+	{
+		$this->Shipment_model->deleteShipment($id);    
+		$this->session->set_flashdata('msg_noti', 'Success Delete Shipment');
+		redirect('dragdrop/');
+	}
 
 	 // File upload
 	 public function fileUpload($id){

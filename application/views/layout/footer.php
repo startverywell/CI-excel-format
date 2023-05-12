@@ -22,6 +22,8 @@
         <script src="<?php echo base_url();?>public/js/DataTables/datatables.min.js"></script>
         <script src="<?php echo base_url();?>public/js/resource/dragdrop.js"></script>
         <script src="<?php echo base_url();?>public/js/resource/spread.js"></script>
+        <script src="<?php echo base_url();?>public/js/resource/details.js"></script>
         <script src="<?php echo base_url();?>public/js/resource/setheader.js"></script>
+        <script src="<?php echo base_url();?>public/js/resource/container.js"></script>
     </body>
 </html>

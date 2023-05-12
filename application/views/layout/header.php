@@ -11,8 +11,12 @@
         <link href="<?php echo base_url();?>public/css/styles.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <link rel="stylesheet" href="<?php echo base_url();?>public/css/gc.spread.sheets.excel2013white.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="<?php echo base_url();?>public/js/DataTables/datatable.min.css">
+        
         <script src="<?php echo base_url();?>public/js/gc.spread.sheets.all.min.js"></script>
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        
     </head>
     <script> var base_url = '<?= site_url();?>'; </script>
     <body class="sb-nav-fixed">
@@ -24,8 +28,6 @@
             <!-- Navbar Search-->
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
                 <div class="input-group">
-                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
                 </div>
             </form>
             <!-- Navbar-->
@@ -49,19 +51,19 @@
                             <div class="sb-sidenav-menu-heading">Core</div>
                             <a class="nav-link" href="<?= site_url('dragdrop');?>">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Shipment
+                                SHIPMENT (STEP 1)
                             </a>
                             <a class="nav-link" href="<?= site_url('setheader');?>">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                SHIPMENT HEADER
+                                HEADER (STEP 2)
                             </a>
                             <a class="nav-link" href="<?= site_url('container');?>">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Container
+                                DETAILS (STEP 3)
                             </a>
                             <a class="nav-link" href="<?= site_url('setdetails');?>">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                SHIPMENT DETAILS
+                                STEP 4 & STEP 5
                             </a>
                         </div>
                     </div>

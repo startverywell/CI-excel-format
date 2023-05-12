@@ -27,7 +27,6 @@ class SetHeader extends CI_Controller {
 
     public function create()
 	{
-        
         foreach ($this->Shipment_model->getindex() as $row) {
             $options[$row->id] = $row->name;
         }
@@ -38,6 +37,45 @@ class SetHeader extends CI_Controller {
         $this->load->view('layout/header');
 		$this->load->view('setheader/create', $data);
 		$this->load->view('layout/footer');
+	}
+
+    // view funcion
+	public function read($id)
+	{
+		//get data from Member_modal using getindex() methods
+        $data = array(
+            'header' => $this->Header_model->getHeader($id)[0], 
+        );
+        //load view
+        $this->load->view('layout/header');
+		$this->load->view('setheader/view', $data);
+		$this->load->view('layout/footer');
+	}
+
+    // edit funcion
+	public function edit($id)
+	{
+        foreach ($this->Shipment_model->getindex() as $row) {
+            $options[$row->id] = $row->name;
+        }
+
+        
+		//get data from Member_modal using getindex() methods
+        $data = array(
+            'header' => $this->Header_model->getHeader($id)[0], 
+            'options' => $options, 
+        );
+        //load view
+        $this->load->view('layout/header');
+		$this->load->view('setheader/edit', $data);
+		$this->load->view('layout/footer');
+	}
+
+	public function delete($id)
+	{
+		$this->Header_model->deleteHeader($id);    
+		$this->session->set_flashdata('msg_noti', 'Success Delete Shipment Header');
+		redirect('setheader/');
 	}
     
 
@@ -72,6 +110,35 @@ class SetHeader extends CI_Controller {
             } else {
                 $this->session->set_flashdata('msg_error', 'save error');
                 redirect('setheader/create');
+            }
+        } 
+	}
+
+    public function update()
+    {
+        /* Load form helper */ 
+        $this->load->helper(array('form'));
+			
+        /* Load form validation library */ 
+        $this->load->library('form_validation');
+           
+        /* Set validation rule for name field in the form */ 
+        $this->form_validation->set_rules('date_entered', 'DATE ENTERED', 'required'); 
+        $this->form_validation->set_rules('shipment_type', 'SHIPMENT TYPE', 'required'); 
+        $this->form_validation->set_rules('factory', 'Factory name', 'required'); 
+        $this->form_validation->set_rules('amount', 'Amount', 'required');
+           
+        if ($this->form_validation->run() == FALSE) { 
+            $this->session->set_flashdata('msg_error', validation_errors());
+            redirect('setheader/edit/'.$this->input->post('id'));
+        } 
+        else { 
+            if ($this->Header_model->updateHeader($this->input->post(), $this->input->post('id'))  ) {
+                $this->session->set_flashdata('msg_noti', 'Success Update Shipment Header');
+                redirect('setheader');
+            } else {
+                $this->session->set_flashdata('msg_error', 'save error');
+                redirect('setheader/edit/'.$this->input->post('id'));
             }
         } 
 	}

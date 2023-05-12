@@ -48,7 +48,6 @@ class Header_model extends CI_Model {
             WHERE  shipment_header.id = '.$header_id.'  
             '
         );
-        
         if ($query->num_rows() > 0) {
             return $query->result();
         } else {

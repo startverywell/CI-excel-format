@@ -13,6 +13,7 @@ class SetDetails extends CI_Controller {
 		$this->load->model('Container_model');
         $this->load->model('Shipment_model');
         $this->load->model('Details_model');
+        $this->load->model('SkuList_model');
     }
 
 
@@ -34,6 +35,56 @@ class SetDetails extends CI_Controller {
 		$this->load->view('setdetails/input', $data);
 		$this->load->view('layout/footer');
 	}
+
+    public function edit($container_id)
+	{
+        $container = $this->Container_model->getContainer($container_id)[0];
+        $data = array(
+            'header_title' => $container->shipment_name.':'.$container->name, 
+            'container_id' => $container_id,
+            'data' => $this->Details_model->getIndex($container_id)
+        );
+		$this->load->view('layout/header');
+		$this->load->view('setdetails/edit', $data);
+		$this->load->view('layout/footer');
+	}
+
+    public function delete($id)
+    {
+        $detail = $this->Details_model->getDetails($id)[0];
+        $container_id = $detail->container_id;
+        $this->Details_model->deleteDetails($id);
+        $this->session->set_flashdata('msg_noti', 'Delete Success!');
+        redirect('setdetails/edit/'.$container_id);
+    }
+
+    public function updateView($id)
+    {
+        $detail = $this->Details_model->getDetails($id)[0];
+        $container_id = $detail->container_id;
+        $container = $this->Container_model->getContainer($container_id)[0];
+        $data = array(
+            'header_title' => $container->shipment_name.':'.$container->name, 
+            'detail' => $detail
+        );
+        $this->load->view('layout/header');
+		$this->load->view('setdetails/update', $data);
+		$this->load->view('layout/footer');
+    }
+
+    public function view($id)
+    {
+        $detail = $this->Details_model->getDetails($id)[0];
+        $container_id = $detail->container_id;
+        $container = $this->Container_model->getContainer($container_id)[0];
+        $data = array(
+            'header_title' => $container->shipment_name.':'.$container->name, 
+            'detail' => $detail
+        );
+        $this->load->view('layout/header');
+		$this->load->view('setdetails/view', $data);
+		$this->load->view('layout/footer');
+    }
     
 
 	// set header
@@ -83,11 +134,55 @@ class SetDetails extends CI_Controller {
             foreach ($value as $key1 => $row) {
                 $detail_data[$header[$key1]] = $row ?? '';
             }
+            if(!$this->SkuList_model->checkSku($detail_data['style'])){
+                $detail_data['pl_new'] = 1;
+            }
             $this->Details_model->createDetails($detail_data);
             $detail_data = [];
         }
 
         $this->session->set_flashdata('msg_noti', 'Success create Container');
         redirect('setdetails');
+    }
+
+    // save detail
+    public function detailSave()
+    {
+        /* Load form helper */ 
+        $this->load->helper(array('form'));
+			
+        /* Load form validation library */ 
+        $this->load->library('form_validation');
+           
+        $id = $this->input->post('id');
+        $container_id = $this->input->post('container_id');
+        /* Set validation rule for name field in the form */ 
+        $this->form_validation->set_rules('style', 'Style', 'required'); 
+           
+        if ($this->form_validation->run() == FALSE) { 
+            $this->session->set_flashdata('msg_error', validation_errors());
+            redirect('setdetails/updateView/'.$id);
+        } 
+        else { 
+            if ($this->Details_model->updateDetails($this->input->post(), $id)  ) {
+                if(!$this->SkuList_model->checkSku($this->input->post('style'))){
+                    $this->Details_model->updateDetails(['pl_new'=>1], $id);
+                }
+                if($this->input->post('single_top') != 1){
+                    $this->Details_model->updateDetails(['single_top'=>0], $id);
+                }
+                if($this->input->post('multi_top') != 1){
+                    $this->Details_model->updateDetails(['multi_top'=>0], $id);
+                }
+                if($this->input->post('asst') != 1){
+                    $this->Details_model->updateDetails(['asst'=>0], $id);
+                }
+                $this->session->set_flashdata('msg_noti', 'Success update Detail');
+                redirect('setdetails/edit/'.$container_id);
+            } else {
+                $this->session->set_flashdata('msg_error', 'save error');
+                redirect('setdetails/updateView/'.$id);
+            }
+        } 
     }
 }

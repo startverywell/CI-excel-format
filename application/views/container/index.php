@@ -34,20 +34,24 @@
                         echo '<td>'.$container->shipment_name.'</td>';
                         echo '<td>'.$container->name.'</td>';
                         echo '<td>
-                                <a class="btn btn-primary" href="'.base_url('container/read/'.$container->id).'">
-                                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                                <a class="btn" href="./container/read/'.$container->id.'">
+                                    <i class="fa-solid fa-eye" style="color: green;"></i>  
                                     Read
                                 </a> 
-                                <a class="btn btn-default" href="'.base_url('container/update/'.$container->id).'">
-                                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> 
+                                <a class="btn" href="./container/edit/'.$container->id.'">
+                                    <i class="fa-solid fa-pencil fa-beat-fade" style="color: blue;"></i>
                                     Edit
+                                </a>
+                                <a class="btn btn-default" href="./setdetails/edit/'.$container->id.'">
+                                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> 
+                                    Edit Data
                                 </a>
                                 <a class="btn btn-default" href="./setdetails/inputData/'.$container->id.'">
                                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> 
-                                    Input Data
+                                    Add Data
                                 </a>
-                                <a class="btn btn-danger" href="'.base_url('container/delete/'.$container->id).'">
-                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 
+                                <a class="btn" href="./container/delete/'.$container->id.'">
+                                    <i class="fa-regular fa-trash-can" style="color: red;"></i>
                                     Delete
                                 </a>
                             </td>';
