@@ -6,7 +6,7 @@
     <div class="col-md-6"></div>
     <div class="col-md-3"></div>
     <div class="col-md-3">
-        <a class="btn btn-primary" href="./dragdrop/create">
+        <a class="btn btn-primary" href="<?php site_url('/container/create')?>">
             <i class="fa-solid fa-plus" style="color: #40f000;"></i>
             Create Shipment
         </a>
@@ -37,11 +37,12 @@
                         echo '<td>'.$shipData->input_2_name.'</td>';
                         echo '<td>'.$shipData->input_3_name.'</td>';
                         echo '<td>
-                            <a class="btn" href="./Dragdrop/read/'.$shipData->id.'">
+                            <a class="btn" href="'.site_url('/dragdrop/read/'.$shipData->id).'">
                                 <i class="fa-solid fa-eye" style="color: green;"></i> 
                                 Read
                             </a> 
-                            <a class="btn" href="./Dragdrop/delete/'.$shipData->id.'">
+                           
+                            <a class="btn" href="'.site_url('/dragdrop/delete/'.$shipData->id).'">
                             <i class="fa-regular fa-trash-can" style="color: red;"></i>
                             Delete</a>
                             </td>';

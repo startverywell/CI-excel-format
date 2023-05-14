@@ -11,7 +11,7 @@
  Target Server Version : 100137 (10.1.37-MariaDB)
  File Encoding         : 65001
 
- Date: 12/05/2023 01:07:17
+ Date: 13/05/2023 12:58:03
 */
 
 SET NAMES utf8mb4;
@@ -33,12 +33,13 @@ CREATE TABLE `container`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `shipment_foregin`(`shipment_id` ASC) USING BTREE,
   CONSTRAINT `shipment_foregin` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of container
 -- ----------------------------
 INSERT INTO `container` VALUES (5, 6, 'FGCXU5053182 - 5721', 0, NULL, 0, NULL, 1);
+INSERT INTO `container` VALUES (6, 7, 'GCXU5053182 - 5999', 0, NULL, 0, NULL, 1);
 
 -- ----------------------------
 -- Table structure for shipment
@@ -59,12 +60,13 @@ CREATE TABLE `shipment`  (
   `out_3_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Receiver Upload',
   `out_4_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'PL S',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of shipment
 -- ----------------------------
 INSERT INTO `shipment` VALUES (6, 'S#F5100', 'CI#23WYBG107 (1).xlsx', 'FINAL PACKING LIST  23WYBG107.xlsx', 'MASTER FILE IMPORT FILE - #XXXX 10.12.22 - CONT.xls', NULL, NULL, NULL, 1, 'SHIPMENT FILE   S#F5100.xlsx', 'Receiver Upload S#F5100- Cont .xlsx', 'MASTER FILE IMPORT FILE - S#F5100- Cont .xlsx', 'PL S#F5100 Cont S#F5100.xlsx');
+INSERT INTO `shipment` VALUES (7, 'S#F1220', 'SHIPMENT FILE.xlsx', 'CI#23WYBG107 (1).xlsx', 'FINAL PACKING LIST  23WYBG107.xlsx', NULL, NULL, NULL, 1, 'SHIPMENT FILE   S#F1220.xlsx', 'Receiver Upload S#F1220- Cont .xlsx', 'MASTER FILE IMPORT FILE - S#F1220- Cont .xlsx', 'PL S#F1220 Cont S#F1220.xlsx');
 
 -- ----------------------------
 -- Table structure for shipment_details
@@ -105,17 +107,22 @@ CREATE TABLE `shipment_details`  (
   `asst` int UNSIGNED NULL DEFAULT 0 COMMENT '0-non active, 1-active',
   `single_top` int NULL DEFAULT 0 COMMENT '0-non active, 1-active',
   `multi_top` int NULL DEFAULT 0 COMMENT '0-non active, 1-active',
+  `pl_add_flag` int NULL DEFAULT 0 COMMENT '0-add 1-new',
+  `description2` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'description2',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `container_forgin`(`container_id` ASC) USING BTREE,
   INDEX `shipment`(`shipment_id` ASC) USING BTREE,
   CONSTRAINT `container_forgin` FOREIGN KEY (`container_id`) REFERENCES `container` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `shipment` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of shipment_details
 -- ----------------------------
-INSERT INTO `shipment_details` VALUES (0, 6, 5, '', 'DSM7016FB', '', '', '', '125', '3000', '', '', '', '', '', '', '', '', '', '', '', '', '', 52.3, 2.4, 2.5, 45.3, '', 50.00, 1, 1, 1, 1, 0);
+INSERT INTO `shipment_details` VALUES (0, 6, 5, '', 'DSM7016FB', '', '', '', '125', '3000', '', '', '', '', '', '', '', '', '', '', '', '', '', 52.3, 2.4, 2.5, 45.3, '', 50.00, 1, 1, 1, 1, 0, 0, NULL);
+INSERT INTO `shipment_details` VALUES (4, 7, 6, '', 'DLA40334', 'HAUNTEDMNSON20 OZ MUG', '', '', '125', '3000', '', '', '', '', '', '', '', '', '', '', '', '', '', 55.5, 33.5, 27, 0, '', 5555.00, 1, 1, 0, 0, 1, 0, NULL);
+INSERT INTO `shipment_details` VALUES (5, 7, 6, '', 'CK1509E1', 'Chucky Sencil Name Face 20oz Ceramic Camper', '', '', '125', '3000', '', '', '', '', '', '', '', '', '', '', '', '', '', 44.4, 33.5, 27, 0, '', 555.00, 1, 1, 1, 0, 0, 0, NULL);
+INSERT INTO `shipment_details` VALUES (6, 7, 6, '', 'CAS702E1', 'CASPER NAME POSE 20OZ CERAMIC', '', '', '125', '3000', '', '', '', '', '', '', '', '', '', '', '', '', '', 55.5, 44.8, 27, 0, '', 5555.00, 1, 1, 1, 0, 0, 0, NULL);
 
 -- ----------------------------
 -- Table structure for shipment_header
@@ -134,15 +141,18 @@ CREATE TABLE `shipment_header`  (
   `bill` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'BILL#',
   `amount` double NULL DEFAULT NULL COMMENT 'AMOUNT',
   `created_at` timestamp NULL DEFAULT NULL COMMENT 'created date',
+  `bill_check` int NOT NULL DEFAULT 0 COMMENT 'bill_check step4 0-non 1-active',
+  `po_check` int NOT NULL DEFAULT 0 COMMENT 'po_check 0-non 1-active',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `shipment_id`(`shipment_id` ASC) USING BTREE,
   CONSTRAINT `shipment_header_ibfk_1` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of shipment_header
 -- ----------------------------
-INSERT INTO `shipment_header` VALUES (8, 6, '2020-02-01', 'FOB', 'Shandong Winner', 'SB', 'GETR205702K08490', '2020-02-01', '2020-02-01', 'S#5100;21WYBG444', 300, NULL);
+INSERT INTO `shipment_header` VALUES (8, 6, '2020-02-01', 'FOB', 'Shandong Winner', 'SB', 'GETR205702K08490', '2020-02-01', '2020-02-01', 'S#5100;21WYBG444', 300, NULL, 0, 0);
+INSERT INTO `shipment_header` VALUES (10, 7, '2020-02-04', 'MDDP', 'Shandong Winner', 'carrier', 'GETR205702K08490', '2020-02-06', '2020-02-01', 'S#5100;21WYB554G', 400, NULL, 0, 0);
 
 -- ----------------------------
 -- Table structure for sku_list

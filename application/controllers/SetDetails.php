@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class SetDetails extends CI_Controller {
+class Setdetails extends CI_Controller {
 
 	public function __construct()
     {
@@ -20,7 +20,7 @@ class SetDetails extends CI_Controller {
 	public function index()
 	{
 		$this->load->view('layout/header');
-		$this->load->view('setdetails/index');
+		$this->load->view('setdetail/index');
 		$this->load->view('layout/footer');
 	}
 
@@ -32,7 +32,19 @@ class SetDetails extends CI_Controller {
             'container_id' => $container_id
         );
 		$this->load->view('layout/header');
-		$this->load->view('setdetails/input', $data);
+		$this->load->view('setdetail/input', $data);
+		$this->load->view('layout/footer');
+	}
+
+    public function one($container_id)
+	{
+        $container = $this->Container_model->getContainer($container_id)[0];
+        $data = array(
+            'header_title' => $container->shipment_name.':'.$container->name, 
+            'container_id' => $container_id
+        );
+		$this->load->view('layout/header');
+		$this->load->view('setdetail/one', $data);
 		$this->load->view('layout/footer');
 	}
 
@@ -45,7 +57,7 @@ class SetDetails extends CI_Controller {
             'data' => $this->Details_model->getIndex($container_id)
         );
 		$this->load->view('layout/header');
-		$this->load->view('setdetails/edit', $data);
+		$this->load->view('setdetail/edit', $data);
 		$this->load->view('layout/footer');
 	}
 
@@ -68,7 +80,7 @@ class SetDetails extends CI_Controller {
             'detail' => $detail
         );
         $this->load->view('layout/header');
-		$this->load->view('setdetails/update', $data);
+		$this->load->view('setdetail/update', $data);
 		$this->load->view('layout/footer');
     }
 
@@ -82,7 +94,7 @@ class SetDetails extends CI_Controller {
             'detail' => $detail
         );
         $this->load->view('layout/header');
-		$this->load->view('setdetails/view', $data);
+		$this->load->view('setdetail/view', $data);
 		$this->load->view('layout/footer');
     }
     
@@ -94,29 +106,30 @@ class SetDetails extends CI_Controller {
             0 => 'po',
             1 => 'style',
             2 => 'description',
-            3 => 'hts',
-            4 => 'pcs_carton',
-            5 => 'ctn',
-            6 => 'total',
-            7 => 'uom',
-            8 => 'ds',
-            9 => 'customer',
-            10 => 'ship',
-            11 => 'cancel',
-            12 => 'customer_po',
-            13 => 'so',
-            14 => 'inv',
-            15 => 'ext_req',
-            16 => 'rcvd',
-            17 => 'short_over',
-            18 => 'notes',
-            19 => 'upc',
-            20 => 'length',
-            21 => 'width',
-            22 => 'height',
-            23 => 'weight',
-            24 => 'cbm',
-            25 => 'price'
+            3 => 'description2',
+            4 => 'hts',
+            5 => 'pcs_carton',
+            6 => 'ctn',
+            7 => 'total',
+            8 => 'uom',
+            9 => 'ds',
+            10 => 'customer',
+            11 => 'ship',
+            12 => 'cancel',
+            13 => 'customer_po',
+            14 => 'so',
+            15 => 'inv',
+            16 => 'ext_req',
+            17 => 'rcvd',
+            18 => 'short_over',
+            19 => 'notes',
+            20 => 'upc',
+            21 => 'length',
+            22 => 'width',
+            23 => 'height',
+            24 => 'weight',
+            25 => 'cbm',
+            26 => 'price'
         ];
         $container_id = $this->input->post('container_id');
         $shipment_id = ($this->Container_model->getContainer($container_id)[0])->shipment_id;
@@ -124,21 +137,23 @@ class SetDetails extends CI_Controller {
         $new_data = [];
         $detail_data = [];
 
-        foreach ($data as $key => $row) {
-            $new_data[$row->row][$row->col] = $row->newValue ?? '';
+        for ($i=0; $i < count($data); $i++) { 
+            if($data[$i][0] != '' && !is_null($data[$i][0])){
+                $new_data[] = $data[$i];
+            }
         }
-        // var_export($new_data); die;
-        foreach ($new_data as $key => $value) {
-            $detail_data['container_id'] = $container_id;
-            $detail_data['shipment_id'] = $shipment_id;
-            foreach ($value as $key1 => $row) {
-                $detail_data[$header[$key1]] = $row ?? '';
+        // var_export($new_data); die();
+        
+        if(count($new_data) > 0){
+            for ($j=0; $j < count($new_data); $j++) { 
+                $detail_data['container_id'] = $container_id;
+                $detail_data['shipment_id'] = $shipment_id;
+                for ($k=0; $k < count($data[$j]); $k++) { 
+                    $detail_data[$header[$k]] = $data[$j][$k];
+                }
+                $this->Details_model->createDetails($detail_data);
+                $detail_data = [];
             }
-            if(!$this->SkuList_model->checkSku($detail_data['style'])){
-                $detail_data['pl_new'] = 1;
-            }
-            $this->Details_model->createDetails($detail_data);
-            $detail_data = [];
         }
 
         $this->session->set_flashdata('msg_noti', 'Success create Container');
@@ -167,6 +182,7 @@ class SetDetails extends CI_Controller {
             if ($this->Details_model->updateDetails($this->input->post(), $id)  ) {
                 if(!$this->SkuList_model->checkSku($this->input->post('style'))){
                     $this->Details_model->updateDetails(['pl_new'=>1], $id);
+                    $this->Details_model->updateDetails(['pl_add_flag'=>1], $id);
                 }
                 if($this->input->post('single_top') != 1){
                     $this->Details_model->updateDetails(['single_top'=>0], $id);
@@ -178,10 +194,10 @@ class SetDetails extends CI_Controller {
                     $this->Details_model->updateDetails(['asst'=>0], $id);
                 }
                 $this->session->set_flashdata('msg_noti', 'Success update Detail');
-                redirect('setdetails/edit/'.$container_id);
+                echo './setdetails/edit/'.$container_id;
             } else {
                 $this->session->set_flashdata('msg_error', 'save error');
-                redirect('setdetails/updateView/'.$id);
+                echo 'setdetails/updateView/'.$id;
             }
         } 
     }

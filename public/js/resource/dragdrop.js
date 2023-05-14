@@ -16,4 +16,9 @@ $(document).ready(function() {
         file_name = fake_path.split("\\").pop();
         $('#name3').text(file_name + " file(s) selected");
     });
+    $('#upload4').change(function() {
+        fake_path = document.getElementById('upload4').value;
+        file_name = fake_path.split("\\").pop();
+        $('#name4').text(file_name + " file(s) selected");
+    });
 });

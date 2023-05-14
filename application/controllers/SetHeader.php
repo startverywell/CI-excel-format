@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class SetHeader extends CI_Controller {
+class Setheader extends CI_Controller {
 
 	public function __construct()
     {
@@ -36,6 +36,16 @@ class SetHeader extends CI_Controller {
         );
         $this->load->view('layout/header');
 		$this->load->view('setheader/create', $data);
+		$this->load->view('layout/footer');
+	}
+
+    public function one($shipment_id)
+	{
+        $data = array(
+            'shipment_id' => $shipment_id, 
+        );
+        $this->load->view('layout/header');
+		$this->load->view('setheader/one', $data);
 		$this->load->view('layout/footer');
 	}
 

@@ -58,8 +58,8 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('database', 'email', 'session', 'phpExcel');
-
+// $autoload['libraries'] = array('database', 'email', 'session', 'phpExcel');
+$autoload['libraries'] = array('database', 'email', 'session');
 /*
 | -------------------------------------------------------------------
 |  Auto-load Drivers

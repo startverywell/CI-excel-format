@@ -37,12 +37,12 @@ class Dragdrop extends CI_Controller {
         
 		if ($this->form_validation->run() == TRUE) {
 			$name = "S#".$this->input->post('name');
-			mkdir('uploads/'. $name, 0777, true);
+			mkdir('public/uploads/'. $name, 0777, true);
 			if (!file_exists('uploads/'. $name)) {
-				mkdir('uploads/'. $name, 0777, true);
+				mkdir('public/uploads/'. $name, 0777, true);
 			} 
 
-			$config['upload_path'] = './uploads/'.$name.'/';
+			$config['upload_path'] = './public/uploads/'.$name.'/';
 			$config['allowed_types'] = 'xlsx|xls|pdf';
 
 			$this->load->library('upload', $config);
@@ -60,15 +60,23 @@ class Dragdrop extends CI_Controller {
 				$this->session->set_flashdata('msg_error', $this->upload->display_errors());
 				redirect('dragdrop/create');
 			} 
+
+			if (!$this->upload->do_upload('input_4_name')) {
+				$this->session->set_flashdata('msg_error', $this->upload->display_errors());
+				redirect('dragdrop/create');
+			} 
 			$ship_data = array(
                 'name'      => $name,
 				'input_1_name' => $_FILES['input_1_name']['name'],
 				'input_2_name' => $_FILES['input_2_name']['name'],
 				'input_3_name' => $_FILES['input_3_name']['name'],
+				'input_4_name' => $_FILES['input_4_name']['name'],
             );
+			
 			if ($this->Shipment_model->createShipment($ship_data)  ) {
 				$this->session->set_flashdata('msg_noti', 'Success create Shipment');
-				redirect('dragdrop');
+				$shipment = $this->Shipment_model->getShipmentbyName($name)[0];
+				redirect('setheader/one/'.$shipment->id);
 			} else {
 				$this->session->set_flashdata('msg_error', 'save error');
 				redirect('dragdrop/create');
@@ -135,5 +143,23 @@ class Dragdrop extends CI_Controller {
 			$this->session->set_flashdata('msg_error', 'File:Error create Shipment');
             redirect('dragdrop/create');
 		}
+	}
+
+	public function download($name)
+	{
+		$pathdir = "uploads/".$name."/"; 
+		// Enter the name to creating zipped directory
+		$zipcreated = "uploads/".$name."/".$name.".zip";
+		if (file_exists($zipcreated)) {
+			force_download($name.".zip", file_get_contents($zipcreated));
+			redirect('dragdrop/');
+		}
+		redirect('dragdrop/');
+	}
+
+	public function createone(){
+		$this->load->view('layout/header');
+		$this->load->view('dragdrop/one');
+		$this->load->view('layout/footer');
 	}
 }

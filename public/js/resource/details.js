@@ -1,5 +1,6 @@
 $(document).ready(function() {
     $('#detail-table').DataTable();
+    $('#check-table').DataTable();
     $('#single_top').click(function() {
         let single_value = $('input[name="single_top"]').val();
         single_value = single_value == 1 ? 0 : 1;

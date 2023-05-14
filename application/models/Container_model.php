@@ -42,6 +42,27 @@ class Container_model extends CI_Model {
             return false;
         }
     }
+
+    public function getContainersByName($ship_id, $name)
+    {
+        $query = $this->db->query(
+            'SELECT 
+                shipment.`name` as shipment_name, 
+                container.* 
+            from container 
+            LEFT JOIN shipment 
+                on container.shipment_id = shipment.id
+            WHERE container.shipment_id = '.$ship_id.' AND container.name = '.$name.'
+            '
+        );
+        
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return false;
+        }
+    }
+
     public function createContainer($data)
     {
         $this->db->trans_start();

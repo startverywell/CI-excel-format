@@ -20,6 +20,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="<?php echo base_url();?>public/js/scripts.js"></script>
         <script src="<?php echo base_url();?>public/js/DataTables/datatables.min.js"></script>
+        <script src="<?php echo base_url();?>public/js/resource/one.js"></script>
         <script src="<?php echo base_url();?>public/js/resource/dragdrop.js"></script>
         <script src="<?php echo base_url();?>public/js/resource/spread.js"></script>
         <script src="<?php echo base_url();?>public/js/resource/details.js"></script>

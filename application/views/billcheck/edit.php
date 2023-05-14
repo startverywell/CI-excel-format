@@ -1,8 +1,14 @@
-<h1 class="mt-4"><?php echo $header->shipment_name?></h1>
+<?php
+    $this->load->helper('form');
+?>
+<h1 class="mt-4">EDIT SHIPMENT HEADER</h1>
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item active"></li>
 </ol>
-<div class="row">
+<form id="set_header" action="<?php echo site_url('billcheck/update');?>" method="POST">
+    <?php echo validation_errors(); ?>  
+    <?php echo form_open('form'); ?> 
+    <?php echo form_hidden('id', $header->id);?>
     <table class="table">
         <thead>
             <tr>
@@ -65,4 +71,11 @@
             </tr>
         </tbody>
     </table>
-</div>
+    <div class="row mt-5" style="justify-content: center;">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <button class="btn btn-primary" type="submit">CHECK SHIPMENT HEADER</button>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</form>

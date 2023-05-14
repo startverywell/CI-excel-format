@@ -1,5 +1,5 @@
 
-<h1 class="mt-4">Container</h1>
+<h1 class="mt-4">CONTAINER</h1>
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item active"></li>
 </ol>
@@ -7,7 +7,7 @@
     <div class="col-md-6"></div>
     <div class="col-md-3"></div>
     <div class="col-md-3">
-        <a class="btn btn-primary" href="./container/create">
+        <a class="btn btn-primary" href="<?php echo site_url('/container/create')?>">
             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> 
             Create Container
         </a>
@@ -34,23 +34,23 @@
                         echo '<td>'.$container->shipment_name.'</td>';
                         echo '<td>'.$container->name.'</td>';
                         echo '<td>
-                                <a class="btn" href="./container/read/'.$container->id.'">
+                                <a class="btn" href="'.site_url('/container/read/'.$container->id).'">
                                     <i class="fa-solid fa-eye" style="color: green;"></i>  
                                     Read
                                 </a> 
-                                <a class="btn" href="./container/edit/'.$container->id.'">
+                                <a class="btn" href="'.site_url('/container/edit/'.$container->id).'">
                                     <i class="fa-solid fa-pencil fa-beat-fade" style="color: blue;"></i>
                                     Edit
                                 </a>
-                                <a class="btn btn-default" href="./setdetails/edit/'.$container->id.'">
+                                <a class="btn btn-default" href="'.site_url('/setdetails/edit/'.$container->id).'">
                                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> 
                                     Edit Data
                                 </a>
-                                <a class="btn btn-default" href="./setdetails/inputData/'.$container->id.'">
+                                <a class="btn btn-default" href="'.site_url('/setdetails/inputData/'.$container->id).'">
                                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> 
                                     Add Data
                                 </a>
-                                <a class="btn" href="./container/delete/'.$container->id.'">
+                                <a class="btn" href="'.site_url('/container/delete/'.$container->id).'">
                                     <i class="fa-regular fa-trash-can" style="color: red;"></i>
                                     Delete
                                 </a>

@@ -43,6 +43,20 @@ class Shipment_model extends CI_Model {
             return false;
         }
     }
+
+    public function getShipmentbyName($shipment)
+    {
+        $this->db->from('shipment');
+        $this->db->where('name', $shipment);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return false;
+        }
+    }
+
     public function updateShipment($data, $shipment_id)
     {
         $this->db->trans_start();

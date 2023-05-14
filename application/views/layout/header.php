@@ -6,15 +6,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Dashboard - SB Admin</title>
+        <title>SHIPMENT ADMIN</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="<?php echo base_url();?>public/css/styles.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <link rel="stylesheet" href="<?php echo base_url();?>public/css/gc.spread.sheets.excel2013white.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="<?php echo base_url();?>public/js/DataTables/datatables.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css" />
         
-        <script src="<?php echo base_url();?>public/js/gc.spread.sheets.all.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         
     </head>
@@ -22,7 +22,7 @@
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.html">Start Bootstrap</a>
+            <a class="navbar-brand ps-3" href="<?= site_url('dragdrop');?>">SHIPMENT</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -31,7 +31,7 @@
                 </div>
             </form>
             <!-- Navbar-->
-            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+            <!-- <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -41,7 +41,7 @@
                         <li><a class="dropdown-item" href="#!">Logout</a></li>
                     </ul>
                 </li>
-            </ul>
+            </ul> -->
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
@@ -49,6 +49,17 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                OUTBOUND SHIPMENTS
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="<?= site_url('dragdrop');?>">View Shipments</a>
+                                    <a class="nav-link" href="<?= site_url('dragdrop/createone');?>">Create Shipments</a>
+                                </nav>
+                            </div>
                             <a class="nav-link" href="<?= site_url('dragdrop');?>">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 SHIPMENT (STEP 1)
@@ -61,7 +72,7 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 DETAILS (STEP 3)
                             </a>
-                            <a class="nav-link" href="<?= site_url('setdetails');?>">
+                            <a class="nav-link" href="<?= site_url('billcheck');?>">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 STEP 4 & STEP 5
                             </a>
@@ -81,14 +92,12 @@
                             if ($this->session->flashdata('msg_noti') != '') {
                                 echo 
                                     '<div class="alert alert-success">
-                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                         <p>' . $this->session->flashdata('msg_noti') . '</p>
                                     </div>';
                             } 
                             if ($this->session->flashdata('msg_error') != '') {
                                 echo 
                                     '<div class="alert alert-danger">
-                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                         <p>'. $this->session->flashdata('msg_error') . '</p>   
                                     </div>';
                             }

@@ -40,6 +40,22 @@ class Container extends CI_Controller {
 		$this->load->view('layout/footer');
 	}
 
+    public function one($shipment_id)
+	{
+        
+        foreach ($this->Shipment_model->getindex() as $row) {
+            $options[$row->id] = $row->name;
+        }
+
+        $data = array(
+            'options' => $options, 
+            'shipment_id' => $shipment_id
+        );
+        $this->load->view('layout/header');
+		$this->load->view('container/one', $data);
+		$this->load->view('layout/footer');
+	}
+
     // view funcion
 	public function read($id)
 	{
@@ -99,7 +115,8 @@ class Container extends CI_Controller {
         else { 
             if ($this->Container_model->createContainer($this->input->post())  ) {
                 $this->session->set_flashdata('msg_noti', 'Success create Container');
-                redirect('container');
+                $container = $this->Container_model->getContainersByName($this->input->post('shipment_id'), $name);
+                redirect('setdetails/one/'.$container->id);
             } else {
                 $this->session->set_flashdata('msg_error', 'save error');
                 redirect('container/create');
