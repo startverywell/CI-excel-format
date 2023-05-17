@@ -92,68 +92,131 @@ $(document).ready(function(){
         return false;
     });
 
-    // $('#create_shipment').on("click", function(e) {
+    const example = document.querySelector('#example1');
+    const exampleParent = document.querySelector('#exampleParent');
 
-    //     if ($('#name').val() == "") {
-    //         alert("input the FileName");
-    //         return;
-    //     }
-    //     if ($('#upload1').val() == "") {
-    //         alert("Please add the first upload file.");
-    //         return;
-    //     }
-    //     if ($('#upload2').val() == "") {
-    //         alert("Please add the second upload file.");
-    //         return;
-    //     }
-    //     if ($('#upload3').val() == "") {
-    //         alert("Please add the third upload file.");
-    //         return;
-    //     }
+    // generate an array of arrays with dummy data
+    const data = new Array(17) // number of rows
+    .fill()
+    .map((_, row) => new Array(28) // number of columns
+        .fill()
+        .map((_, column) => ``)
+    );
 
-    //     let fileInput1 = document.getElementById('upload1');
-    //     let fileInput2 = document.getElementById('upload2');
-    //     let fileInput3 = document.getElementById('upload3');
-    //     let fileInput4 = document.getElementById('upload4');
+    const hot = new Handsontable(example, {
+        data,
+        rowHeaders: true,
+        colHeaders: ['PO#', 'STYLE','ASST','ST', 'MT', 'DESCRIPTION', 'DESCRIPTION2', 'HTS', 'PCS/CARTON', 'CTN', 'TOTAL', 'UOM', 'DS', 'CUSTOMER', 'SHIP', 'CANCEL', 'CUSTOMER PO', 'SO', 'INV', 'EXT REQ' ,'RCVD', 'SHORT/OVER', 'NOTES', 'UPC' ,'Length', 'Width', 'Height', 'Weight', 'CBM', 'Price'],
+        width: '100%',
+        height: 'auto',
+        // height: '100%',
+        rowHeights: 23,
+        colWidths: 100,
+        columns: [
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'checkbox'
+            },
+            {
+                type: 'checkbox'
+            },
+            {
+                type: 'checkbox'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
 
-    //     let files1 = fileInput1.files;
-    //     let files2 = fileInput2.files;
-    //     let files3 = fileInput3.files;
-    //     let files4 = fileInput4.files;
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+        ],
+        fixedColumnsStart: 2,
+        licenseKey: 'non-commercial-and-evaluation'
+    });
 
-    //     let formData = new FormData();
+    exampleParent.style.height = '810px';
+    exampleParent.style.overflow = 'scroll';
+    hot.refreshDimensions();
 
-    //     for (let i = 0; i < files1.length; i++) {
-    //         formData.append(fileInput1.name, files1[i]);
-    //     }
-
-    //     for (let i = 0; i < files2.length; i++) {
-    //         formData.append(fileInput2.name, files2[i]);
-    //     }
-
-    //     for (let i = 0; i < files3.length; i++) {
-    //         formData.append(fileInput3.name, files3[i]);
-    //     }
-
-    //     for (let i = 0; i < files4.length; i++) {
-    //         formData.append(fileInput4.name, files4[i]);
-    //     }
-    //     formData.append('name', $('#name').val());
-
-    //     $.ajax({
-    //         url: base_url + '/dragdrop/save',
-    //         data: formData,
-    //         cache: false,
-    //         contentType: false,
-    //         processData: false,
-    //         type: 'POST',
-    //         dataType: 'json',
-    //         success: function (req) {
-    //             next_func($('#create_shipment'));
-                
-    //         }
-    //     });
-
-    //     // next_func($('#create_shipment'));
-    // });
+    
+    $('#create_details').click(function(){
+        let data = JSON.stringify(hot.getData());
+        $('#detail_data').val(data);
+        $('form[name="savedetail"]').submit();
+    });
 });

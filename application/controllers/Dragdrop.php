@@ -37,40 +37,41 @@ class Dragdrop extends CI_Controller {
         
 		if ($this->form_validation->run() == TRUE) {
 			$name = "S#".$this->input->post('name');
-			mkdir('public/uploads/'. $name, 0777, true);
-			if (!file_exists('uploads/'. $name)) {
-				mkdir('public/uploads/'. $name, 0777, true);
+			mkdir('public/uploads/'. $name.'/'.$name, 0777, true);
+			if (!file_exists('public/uploads/'. $name.'/'.$name)) {
+				mkdir('public/uploads/'. $name.'/'.$name, 0777, true);
 			} 
 
-			$config['upload_path'] = './public/uploads/'.$name.'/';
+			$config['upload_path'] = './public/uploads/'.$name.'/'.$name.'/';
 			$config['allowed_types'] = 'xlsx|xls|pdf';
 
 			$this->load->library('upload', $config);
 			if (!$this->upload->do_upload('input_1_name')) {
 				$this->session->set_flashdata('msg_error', $this->upload->display_errors());
-				redirect('dragdrop/create');
+				redirect('dragdrop/createone');
 			} 
 
 			if (!$this->upload->do_upload('input_2_name')) {
 				$this->session->set_flashdata('msg_error', $this->upload->display_errors());
-				redirect('dragdrop/create');
+				redirect('dragdrop/createone');
 			} 
 
 			if (!$this->upload->do_upload('input_3_name')) {
 				$this->session->set_flashdata('msg_error', $this->upload->display_errors());
-				redirect('dragdrop/create');
+				redirect('dragdrop/createone');
 			} 
 
+			//$this->upload->do_upload('input_4_name');
 			if (!$this->upload->do_upload('input_4_name')) {
 				$this->session->set_flashdata('msg_error', $this->upload->display_errors());
-				redirect('dragdrop/create');
+				redirect('dragdrop/createone');
 			} 
 			$ship_data = array(
                 'name'      => $name,
 				'input_1_name' => $_FILES['input_1_name']['name'],
 				'input_2_name' => $_FILES['input_2_name']['name'],
 				'input_3_name' => $_FILES['input_3_name']['name'],
-				'input_4_name' => $_FILES['input_4_name']['name'],
+				// 'input_4_name' => $_FILES['input_4_name']['name'],
             );
 			
 			if ($this->Shipment_model->createShipment($ship_data)  ) {
@@ -79,12 +80,12 @@ class Dragdrop extends CI_Controller {
 				redirect('setheader/one/'.$shipment->id);
 			} else {
 				$this->session->set_flashdata('msg_error', 'save error');
-				redirect('dragdrop/create');
+				redirect('dragdrop/createone');
 			}
 			
 		} else {
 			$this->session->set_flashdata('msg_error', validation_errors());
-			redirect('dragdrop/create');
+			redirect('dragdrop/createone');
 		}
 	}
 	// view funcion
@@ -161,5 +162,26 @@ class Dragdrop extends CI_Controller {
 		$this->load->view('layout/header');
 		$this->load->view('dragdrop/one');
 		$this->load->view('layout/footer');
+	}
+
+	public function edit($id)
+	{
+		$data = array(
+            'shipment' => $this->Shipment_model->getShipment($id)[0], 
+        );
+		$this->load->view('layout/header');
+		$this->load->view('dragdrop/edit', $data);
+		$this->load->view('layout/footer');
+	}
+
+	public function update()
+	{
+		if ($this->Shipment_model->updateHeader($this->input->post(),$this->input->post('id'))) {
+            $this->session->set_flashdata('msg_noti', 'Success Update Shipment');
+            redirect('dragdrop/');
+        } else {
+            $this->session->set_flashdata('msg_error', 'save error');
+            redirect('billcheck/billone/'.$this->input->post('id'));
+        }
 	}
 }

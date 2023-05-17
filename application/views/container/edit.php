@@ -20,6 +20,7 @@
     <div class="row mt-5" style="justify-content: center;">
         <div class="col-md-3"></div>
         <div class="col-md-6">
+            <a class="btn btn-success" href="<?php echo site_url('/container/one/'.$container->shipment_id)?>">Back</a>
             <button class="btn btn-primary" type="submit">SAVE CONTAINER</button>
         </div>
         <div class="col-md-3"></div>

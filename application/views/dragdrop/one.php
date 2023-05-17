@@ -11,19 +11,26 @@
                         <form id="msform" action="<?php echo site_url('dragdrop/save');?>" method="POST" enctype="multipart/form-data">
                             <!-- progressbar -->
                             <ul id="progressbar">
-                                <li class="active" id="account"><strong>SHIPMENT</strong></li>
-                                <li id="personal"><strong>HEADER</strong></li>
-                                <li id="payment"><strong>CONTAINER</strong></li>
-                                <li id="confirm"><strong>PACKING LIST</strong></li>
-                                <li id="confirm"><strong>CHECK BILL</strong></li>
-                                <li id="confirm"><strong>CHECK PO</strong></li>
-                                <li id="confirm"><strong>GENERATE</strong></li>
+                                <li class="active" id="shipment"><strong>SHIPMENT</strong></li>
+                                <li id="header_icon"><strong>ISL HEADER</strong></li>
+                                <li id="header_copy"><strong>HEADER COPY</strong></li>
+                                <li id="container"><strong>ISL DETAIL</strong></li>
+                                <li id="packing"><strong>PACKING LIST</strong></li>
+                                <li id="confirm"><strong>CREATE QB BILL</strong></li>
+                                <li id="confirm"><strong>UPDATE QB PO's</strong></li>
+                                <li id="download"><strong>GENERATE</strong></li>
                             </ul>
                             <!-- fieldsets -->
                             <fieldset>
                                 <div class="form-card">
                                     <h2 class="fs-title mb-5">SHIPMENT Information</h2>
-                                    <input type="text" id= "name" name="name" placeholder="Folder Name"/>
+                                    <div class="col-3">
+                                        <label class="pay">SHIPMENT NAME(S#)</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <?php echo form_input(array('name' => 'name','placeholder'=>"S#"));?>
+                                    </div>
+                                    <!-- <input type="text" id= "name" name="name" placeholder="Folder Name"/> -->
                                     <div class="row mt-5">
                                         <div class="col-md-3">
                                             <div class="card bg-success text-white mb-4">
@@ -54,6 +61,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
                                 <input type="submit" name="next" class="action-button" value="Next Step" id="create_shipment"/>
                             </fieldset>
                         </form>

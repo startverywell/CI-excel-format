@@ -3,6 +3,7 @@
     <li class="breadcrumb-item active"></li>
 </ol>
 <div class="row">
+    <a class="btn btn-success" href="<?php echo site_url('/container/one/'.$shipment_id)?>">Back</a>      
     <!-- DataTable -->
     <table id="detail-table" class="table table-striped table-hover">
         <thead>

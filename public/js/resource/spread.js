@@ -2,14 +2,13 @@
 window.onload = function () {
     // colHeaders: ['PO#', 'STYLE', 'DESCRIPTION', 'DESCRIPTION2', 'HTS', 'PCS/CARTON', 'CTN', 'TOTAL', 'UOM', 'DS', 'CUSTOMER', 'SHIP', 'CANCEL', 'CUSTOMER PO', 'SO', 'INV', 'EXT REQ' ,'RCVD', 'SHORT/OVER', 'NOTES', 'UPC' ,'Length', 'Width', 'Height', 'Weight', 'CBM', 'Price'],
         
-    const triggerBtn = document.querySelector('#triggerBtn');
     const example = document.querySelector('#example');
     const exampleParent = document.querySelector('#exampleParent');
 
     // generate an array of arrays with dummy data
     const data = new Array(20) // number of rows
     .fill()
-    .map((_, row) => new Array(27) // number of columns
+    .map((_, row) => new Array(28) // number of columns
         .fill()
         .map((_, column) => ``)
     );
@@ -17,11 +16,106 @@ window.onload = function () {
     const hot = new Handsontable(example, {
         data,
         rowHeaders: true,
-        colHeaders: ['PO#', 'STYLE', 'DESCRIPTION', 'DESCRIPTION2', 'HTS', 'PCS/CARTON', 'CTN', 'TOTAL', 'UOM', 'DS', 'CUSTOMER', 'SHIP', 'CANCEL', 'CUSTOMER PO', 'SO', 'INV', 'EXT REQ' ,'RCVD', 'SHORT/OVER', 'NOTES', 'UPC' ,'Length', 'Width', 'Height', 'Weight', 'CBM', 'Price'],
+        colHeaders: ['PO#', 'STYLE','ASST','ST', 'MT', 'DESCRIPTION', 'DESCRIPTION2', 'HTS', 'PCS/CARTON', 'CTN', 'TOTAL', 'UOM', 'DS', 'CUSTOMER', 'SHIP', 'CANCEL', 'CUSTOMER PO', 'SO', 'INV', 'EXT REQ' ,'RCVD', 'SHORT/OVER', 'NOTES', 'UPC' ,'Length', 'Width', 'Height', 'Weight', 'CBM', 'Price'],
         width: '100%',
-        height: '100%',
+        height: 'auto',
+        // height: '100%',
         rowHeights: 23,
         colWidths: 100,
+        columns: [
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'checkbox'
+            },
+            {
+                type: 'checkbox'
+            },
+            {
+                type: 'checkbox'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+
+            {
+                type: 'text'
+            },
+            {
+                type: 'text'
+            },
+        ],
+        fixedColumnsStart: 2,
         licenseKey: 'non-commercial-and-evaluation'
     });
 
@@ -31,6 +125,7 @@ window.onload = function () {
     
     $('#save_excel_button').click(function(){
         let container_id = $('#container_id').val();
+        let shipment_id = $('#shipment_id').val();
         let formData = {'container_id': container_id, 'data':JSON.stringify(hot.getData())};
 
         $.ajax({
@@ -42,6 +137,7 @@ window.onload = function () {
             alert('SUCCESS');
             window.location.href = response;
         });
+        window.location.href = base_url + '/container/one/'+shipment_id    ;
     });
 };
 

@@ -12,6 +12,7 @@ class Container extends CI_Controller {
         $this->load->library('form_validation');        
 		$this->load->model('Shipment_model');
         $this->load->model('Container_model');
+        $this->load->model('Header_model');
     }
 
 
@@ -41,18 +42,26 @@ class Container extends CI_Controller {
 	}
 
     public function one($shipment_id)
-	{
-        
-        foreach ($this->Shipment_model->getindex() as $row) {
-            $options[$row->id] = $row->name;
-        }
-
+	{      
         $data = array(
-            'options' => $options, 
-            'shipment_id' => $shipment_id
+            'header' => $this->Header_model->getHeaderbyShipID($shipment_id)[0], 
+            'shipment_id' => $shipment_id,
+            'containerList' => $this->Container_model->getContainers($shipment_id),
         );
         $this->load->view('layout/header');
 		$this->load->view('container/one', $data);
+		$this->load->view('layout/footer');
+	}
+
+    public function copy($shipment_id)
+	{      
+        $data = array(
+            'header' => $this->Header_model->getHeaderbyShipID($shipment_id)[0], 
+            'shipment_id' => $shipment_id,
+            'containerList' => $this->Container_model->getContainers($shipment_id),
+        );
+        $this->load->view('layout/header');
+		$this->load->view('container/copy', $data);
 		$this->load->view('layout/footer');
 	}
 
@@ -113,9 +122,9 @@ class Container extends CI_Controller {
             redirect('container/create');
         } 
         else { 
-            if ($this->Container_model->createContainer($this->input->post())  ) {
+            if ($this->Container_model->createContainer(['name'=>$this->input->post('name'),'shipment_id'=>$this->input->post('shipment_id')])  ) {
                 $this->session->set_flashdata('msg_noti', 'Success create Container');
-                $container = $this->Container_model->getContainersByName($this->input->post('shipment_id'), $name);
+                $container = $this->Container_model->getContainersByName($this->input->post('shipment_id'), $this->input->post('name'))[0];
                 redirect('setdetails/one/'.$container->id);
             } else {
                 $this->session->set_flashdata('msg_error', 'save error');
@@ -144,7 +153,7 @@ class Container extends CI_Controller {
         else { 
             if ($this->Container_model->updateContainer($this->input->post(), $this->input->post('id'))  ) {
                 $this->session->set_flashdata('msg_noti', 'Success Update Container');
-                redirect('container');
+                redirect('container/');
             } else {
                 $this->session->set_flashdata('msg_error', 'save error');
                 redirect('container/edit/'.$this->input->post('id'));

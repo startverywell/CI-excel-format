@@ -1,81 +1,94 @@
 <?php
     $this->load->helper('form');
 ?>
-<h1 class="mt-4">EDIT SHIPMENT HEADER</h1>
-<ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item active"></li>
-</ol>
-<form id="set_header" action="<?php echo site_url('billcheck/checkall');?>" method="POST">
-    <?php echo validation_errors(); ?>  
-    <?php echo form_open('form'); ?> 
-    <?php echo form_hidden('id', $header->id);?>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Field</th>
-                <th>Value</th>
-            </tr>
-        </thead>
-        <tbody>   
-            <tr class="table-primary">
-                <td>Shipment Name</td>
-                <td><?php echo $header->shipment_name?></td>
-            </tr>
-            <tr class="table-success">
-                <td>DATE ENTERED </td>
-                <td><?php echo $header->date_entered?></td>
-            </tr>
-            <tr class="table-success">
-                <td>SHIPMENT TYPE</td>
-                <td><?php echo $header->shipment_type?></td>
-            </tr>
-            <tr class="table-success">
-                <td>FACTORY</td>
-                <td><?php echo $header->factory?></td>
-            </tr>
-            <tr class="table-success">
-                <td>CARRIER</td>
-                <td><?php echo $header->carrier?></td>
-            </tr>
-            <tr class="table-info">
-                <td>BL#</td>
-                <td><?php echo $header->bl?></td>
-            </tr>
-            <tr class="table-info">
-                <td>BILL/INV DATE</td>
-                <td><?php echo $header->bill_date?></td>
-            </tr>
-            <tr class="table-info">
-                <td>DOCS RCVD DATE</td>
-                <td><?php echo $header->docs_date?></td>
-            </tr>
-            <tr class="table-info">
-                <td>Bill#</td>
-                <td><?php echo $header->bill?></td>
-            </tr>
-            <tr class="table-info">
-                <td>Amount</td>
-                <td><?php echo $header->amount?></td>
-            </tr>
-            <tr class="table-success">
-                <td>BILL# CHECK</td>
-                <td>
-                    <?php echo ($header->bill_check==1 ? '<i class="fa-solid fa-check" style="color: #2df41f;"></i>' :'<i class="fa-solid fa-xmark" style="color: red;"></i>'); ?>
-                </td>
-            </tr>
-            <tr class="table-success">
-                <td>PO# CHECK</td>
-                <td>
-                    <?php echo ($header->po_check==1 ? '<i class="fa-solid fa-check" style="color: #2df41f;"></i>' :'<i class="fa-solid fa-xmark" style="color: red;"></i>'); ?>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="row mt-5" style="justify-content: center;">
-        <div class="col-md-3"></div>
-        <div class="col-md-6">
-            <?php echo ($header->bill_check==1 ? '<button class="btn btn-primary" type="submit">CHECK SHIPMENT DETAILS</button>' :'<a class="btn btn-danger" href="./billcheck/edit/'.$header->id.'">PLEASSE CHECK SHIPMENT HEADER</a>'); ?>
+<link rel="stylesheet" href="<?php echo base_url();?>public/css/one.css">
+<!-- MultiStep Form -->
+<div class="container-fluid" id="grad1">
+    <div class="row justify-content-center mt-0">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 text-center p-0 mt-3 mb-2">
+            <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
+                <h2><strong>UPDATE QB PO's</strong></h2>
+                <p>Click CHECK button to go to next step</p>
+                <div class="row">
+                    <div class="col-md-12 mx-0">
+                        <form id="msform" action="<?php echo site_url('billcheck/checkall');?>" method="POST">
+                            <?php echo form_hidden('id', $header->id);?>
+                            <?php echo form_hidden('shipment_id', $header->shipment_id);?>
+                            <!-- progressbar -->
+                            <ul id="progressbar">
+                                <li id="shipment"><strong>SHIPMENT</strong></li>
+                                <li id="header_icon"><strong>ISL HEADER</strong></li>
+                                <li id="header_copy"><strong>HEADER COPY</strong></li>
+                                <li id="container"><strong>ISL DETAIL</strong></li>
+                                <li id="packing"><strong>PACKING LIST</strong></li>
+                                <li id="confirm"><strong>CREATE QB BILL</strong></li>
+                                <li class="active" id="confirm"><strong>UPDATE QB PO's</strong></li>
+                                <li id="download"><strong>GENERATE</strong></li>
+                            </ul>
+                            <!-- fieldsets -->
+                            <fieldset>
+                                <div class="form-card">
+                                    <h2 class="fs-title mb-2">UPDATE QB PO's</h2>
+                                    <h4 class="mb-5"><?php echo $header->shipment_name?></h4>
+                                    <div class="row">
+                                        <!-- DataTable -->
+                                        <table id="detail-table" class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>No.</th>
+                                                    <th>Container</th>
+                                                    <th>PO#</th>
+                                                    <th>SKU</th>
+                                                    <th>DESCRIPTION</th>
+                                                    <th>3PL NEW?</th>
+                                                    <th>ASST</th>
+                                                    <th>SINGLE TOPS</th>
+                                                    <th>MULTI TOPS</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            <?php 
+                                                $no = 1;
+                                                if ($details != false) {
+                                                    foreach ($details as $detali) {
+                                                        echo '<tr>';
+                                                        echo '<td>'.$no++.'</td>';
+                                                        echo '<td>'.$detali->container_name.'</td>';
+                                                        echo '<td>'.$detali->po.'</td>';
+                                                        echo '<td>'.$detali->style.'</td>';
+                                                        echo '<td>'.$detali->description.'</td>';
+                                                        echo '<td>'.($detali->pl_new==1 ? '<i class="fa-solid fa-check" style="color: #2df41f;"></i>' :'').'</td>';
+                                                        echo '<td>'.($detali->asst==1 ? '<i class="fa-solid fa-check" style="color: #2df41f;"></i>' :'').'</td>';
+                                                        echo '<td>'.($detali->single_top==1 ? '<i class="fa-solid fa-check" style="color: #2df41f;"></i>' :'').'</td>';
+                                                        echo '<td>'.($detali->multi_top==1 ? '<i class="fa-solid fa-check" style="color: #2df41f;"></i>' :'').'</td>';
+                                                        echo '<td>
+                                                                <a class="btn" href="../../setdetails/view/'.$detali->id.'">
+                                                                    <i class="fa-solid fa-eye" style="color: green;"></i>
+                                                                </a> 
+                                                                <a class="btn" href="../../setdetails/updateView/'.$detali->id.'">
+                                                                    <i class="fa-solid fa-pencil fa-beat-fade" style="color: blue;"></i>
+                                                                </a>
+                                                                <a class="btn" href="../../setdetails/delete/'.$detali->id.'">
+                                                                    <i class="fa-regular fa-trash-can" style="color: red;"></i>
+                                                                </a>
+                                                            </td>';
+                                                        echo '</tr>';
+                                                    }
+                                                }
+                                            ?>
+                                            </tbody>
+                                        </table>
+                                        <!-- /.DataTable -->
+                                    </div>
+                                </div>
+                                <a type="button" class="previous action-button-previous" href="<?php echo site_url('/billcheck/billone/'.$header->shipment_id)?>">Previous</a>
+                                <input type="submit" class="action-button" id="check_bill"  value="CREATE"/>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-3"></div>
     </div>
-</form>
+</div>

@@ -26,13 +26,21 @@ class Generator_model extends CI_Model {
     {
         $header_data = $this->Header_model->getHeaderbyShipID($shipment_id)[0];
         $container_data = $this->Container_model->getContainers($shipment_id);
+        $container_name = '';
         foreach ($container_data as $key => $container) {
             $details[$container->name] = $this->Details_model->getIndex($container->id);
+            $container_name = $container->name;
+            if (!file_exists('public/uploads/'. $header_data->shipment_name.'/'.$container_name)) {
+				mkdir('public/uploads/'. $header_data->shipment_name.'/'.$container_name, 0777, true);
+			} 
+            $this->makeReciver($header_data, $this->Details_model->getIndex($container->id),$container_name);
+            $this->makeMaster($header_data, $this->Details_model->getIndex($container->id),$container_name);
+            $this->makePLS($header_data,$container_name);
         }
         $this->makeShipment($header_data, $details);
-        $this->makeReciver($header_data, $details);
-        $this->makeMaster($header_data, $details);
-        $this->makePLS($header_data);
+        // $this->makeReciver($header_data, $details,$container_name);
+        // $this->makeMaster($header_data, $details,$container_name);
+        // $this->makePLS($header_data,$container_name);
         
     }
 
@@ -119,18 +127,18 @@ class Generator_model extends CI_Model {
 
         $objPHPExcel->getActiveSheet()->SetCellValue('Y'.$row, 'ddddd');
         $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel); 
-        $objWriter->save("uploads/".$header_data->shipment_name."/".$file_name.".xlsx");
+        $objWriter->save("public/uploads/".$header_data->shipment_name."/".$file_name.".xlsx");
         return $this->Shipment_model->updateShipment(['out_1_name'=>$file_name.".xlsx"],$header_data->shipment_id);
     }
 
     
-    public function makeReciver($header_data, $details)
+    public function makeReciver($header_data, $container,$container_name)
     {
         $inputFileName='uploads/template/Receiver Upload.xlsx';
         /**Load$inputFileNametoaPHPExcelObject**/ 
         $objPHPExcel=PHPExcel_IOFactory::load($inputFileName);
         
-        $file_name = "Receiver Upload ".$header_data->shipment_name."- Cont ";
+        $file_name = "Receiver Upload ".$header_data->shipment_name."- ".$container_name;
         /**Create anew PHPExcelObject**/ 
         // $objPHPExcel=new PHPExcel();
         $objPHPExcel->getProperties() 
@@ -143,32 +151,34 @@ class Generator_model extends CI_Model {
             ->setCategory($header_data->shipment_name);                                                                             
         
         $row = 2;
-        foreach ($details as $name => $container) {
-            for ($i=0; $i < count($container); $i++) { 
-                $detail = $container[$i];
-                if($detail->single_top == 1 || $detail->multi_top == 1){
-                    $sku = $detail->notes ?? '';
-                    $qty = $detail->ctn ?? '';
-                } else {
-                    $sku = $detail->style ?? '';
-                    $qty = $detail->pcs_carton ?? '';
-                }
-                $objPHPExcel->getActiveSheet()->SetCellValue('A'.$row, $name); //container #
-                $objPHPExcel->getActiveSheet()->SetCellValue('B'.$row, $detail->po ?? ''); //PO#
-                $objPHPExcel->getActiveSheet()->SetCellValue('E'.$row, $sku); //SKU
-                $objPHPExcel->getActiveSheet()->SetCellValue('F'.$row, $qty ?? ''); //QTY ???
-                $objPHPExcel->getActiveSheet()->SetCellValue('G'.$row, $detail->po ?? ''); // Lot# ???
-                $row++;
-            }   
-        }
+        for ($i=0; $i < count($container); $i++) { 
+            $detail = $container[$i];
+            if($detail->single_top == 1 || $detail->multi_top == 1){
+                $sku = $detail->notes ?? '';
+                $qty = $detail->ctn ?? '';
+            } else if($detail->asst == 1) {
+                $sku = $detail->style ?? '';
+                $qty = $detail->pcs_carton ?? '';
+            }
+            else {
+                $sku = $detail->style ?? '';
+                $qty = $detail->total ?? '';
+            }
+            $objPHPExcel->getActiveSheet()->SetCellValue('A'.$row, $container_name); //container #
+            $objPHPExcel->getActiveSheet()->SetCellValue('B'.$row, $detail->po ?? ''); //PO#
+            $objPHPExcel->getActiveSheet()->SetCellValue('E'.$row, $sku); //SKU
+            $objPHPExcel->getActiveSheet()->SetCellValue('F'.$row, $qty ?? ''); //QTY ???
+            $objPHPExcel->getActiveSheet()->SetCellValue('G'.$row, $detail->po ?? ''); // Lot# ???
+            $row++;
+        }   
         $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel); 
-        $objWriter->save("uploads/".$header_data->shipment_name."/".$file_name.".xlsx");
+        $objWriter->save("public/uploads/".$header_data->shipment_name."/".$container_name."/".$file_name.".xlsx");
         return $this->Shipment_model->updateShipment(['out_2_name'=>$file_name.".xlsx"],$header_data->shipment_id);
     }
 
-    public function makeMaster($header_data, $details)
+    public function makeMaster($header_data, $container,$container_name)
     {
-        $file_name = "MASTER FILE IMPORT FILE - ".$header_data->shipment_name."- Cont ";
+        $file_name = "MASTER FILE IMPORT FILE - ".$header_data->shipment_name."- ".$container_name;
         $inputFileName='uploads/template/MASTER FILE IMPORT FILE.xls';
         /**Load$inputFileNametoaPHPExcelObject**/ 
         $objPHPExcel=PHPExcel_IOFactory::load($inputFileName);
@@ -184,33 +194,31 @@ class Generator_model extends CI_Model {
             ->setCategory($header_data->shipment_name);
 
         $row = 3;                                                                    
-        foreach ($details as $name => $container) {
-            for ($i=0; $i < count($container); $i++) { 
-                $detail = $container[$i];
-                if ($detail->pl_new == 1) {
-                    $objPHPExcel->getActiveSheet()->SetCellValue('A'.$row, $detail->style ?? ''); //sku
-                    $objPHPExcel->getActiveSheet()->SetCellValue('B'.$row, $detail->description ?? ''); // description
-                    $objPHPExcel->getActiveSheet()->SetCellValue('C'.$row, $detail->description2); // description2
-                    $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $detail->upc ?? ''); // UPC
-                    $objPHPExcel->getActiveSheet()->SetCellValue('O'.$row, $detail->asst == 1 ? 'each' : 'carton'); // Primary Unit of Measure
-                    $objPHPExcel->getActiveSheet()->SetCellValue('Q'.$row, $detail->asst == 1 ? '1' : $detail->pcs_carton ?? ''); // Packing UoM QTY
-                    $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $detail->length ?? ''); // length
-                    $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $detail->width ?? ''); // width
-                    $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $detail->height ?? ''); // height
-                    $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $detail->weight ?? ''); // weight
-                    $row++;
-                }
-                
-            }   
-        }
+        for ($i=0; $i < count($container); $i++) { 
+            $detail = $container[$i];
+            if ($detail->pl_new == 1) {
+                $objPHPExcel->getActiveSheet()->SetCellValue('A'.$row, $detail->style ?? ''); //sku
+                $objPHPExcel->getActiveSheet()->SetCellValue('B'.$row, $detail->description ?? ''); // description
+                $objPHPExcel->getActiveSheet()->SetCellValue('C'.$row, $detail->description2); // description2
+                $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $detail->upc ?? ''); // UPC
+                $objPHPExcel->getActiveSheet()->SetCellValue('O'.$row, $detail->asst == 1 ? 'each' : 'carton'); // Primary Unit of Measure
+                $objPHPExcel->getActiveSheet()->SetCellValue('Q'.$row, $detail->asst == 1 ? '1' : $detail->pcs_carton ?? ''); // Packing UoM QTY
+                $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $detail->length ?? ''); // length
+                $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $detail->width ?? ''); // width
+                $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $detail->height ?? ''); // height
+                $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $detail->weight ?? ''); // weight
+                $row++;
+            }
+            
+        }   
         $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel); 
-        $objWriter->save("uploads/".$header_data->shipment_name."/".$file_name.".xlsx");
+        $objWriter->save("public/uploads/".$header_data->shipment_name."/".$container_name."/".$file_name.".xlsx");
         return $this->Shipment_model->updateShipment(['out_3_name'=>$file_name.".xlsx"],$header_data->shipment_id);
     }
 
-    public function makePLS($header_data)
+    public function makePLS($header_data,$container_name)
     {
-        $file_name = "PL ".$header_data->shipment_name." Cont ".$header_data->shipment_name;
+        $file_name = "PL ".$header_data->shipment_name." Cont ".$container_name;
         /**Create anew PHPExcelObject**/ 
         $objPHPExcel=new PHPExcel();
         $objPHPExcel->getProperties() 
@@ -223,7 +231,7 @@ class Generator_model extends CI_Model {
             ->setCategory($header_data->shipment_name);
         
         $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel); 
-        $objWriter->save("uploads/".$header_data->shipment_name."/".$file_name.".xlsx");
+        $objWriter->save("public/uploads/".$header_data->shipment_name."/".$container_name."/".$file_name.".xlsx");
         return $this->Shipment_model->updateShipment(['out_4_name'=>$file_name.".xlsx"],$header_data->shipment_id);
     }
 

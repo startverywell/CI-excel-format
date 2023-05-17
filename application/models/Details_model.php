@@ -17,6 +17,25 @@ class Details_model extends CI_Model {
             return false;
         }
     }
+
+    public function getAll($shipment_id)
+	{
+        $query = $this->db->query(
+            'SELECT 
+                container.`name` as container_name, 
+                shipment_details.* 
+            from shipment_details 
+            LEFT JOIN container 
+                on shipment_details.container_id = container.id
+            WHERE shipment_details.shipment_id = '.$shipment_id.'
+            '
+        );
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return false;
+        }
+    }
     
     public function createDetails($data)
     {

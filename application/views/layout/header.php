@@ -49,18 +49,19 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 OUTBOUND SHIPMENTS
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <div class="collapse show" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="<?= site_url('pllist');?>">3PL LIST</a>
                                     <a class="nav-link" href="<?= site_url('dragdrop');?>">View Shipments</a>
                                     <a class="nav-link" href="<?= site_url('dragdrop/createone');?>">Create Shipments</a>
                                 </nav>
                             </div>
-                            <a class="nav-link" href="<?= site_url('dragdrop');?>">
+                            <!-- <a class="nav-link" href="<?= site_url('dragdrop');?>">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 SHIPMENT (STEP 1)
                             </a>
@@ -68,7 +69,7 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 HEADER (STEP 2)
                             </a>
-                            <a class="nav-link" href="<?= site_url('container');?>">
+                            <a class="nav-link" href="<?= site_url('container/');?>">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 DETAILS (STEP 3)
                             </a>
@@ -79,7 +80,7 @@
                             <a class="nav-link" href="<?= site_url('generators');?>">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 GENERATOR (STEP 6)
-                            </a>
+                            </a> -->
                         </div>
                     </div>
                 </nav>

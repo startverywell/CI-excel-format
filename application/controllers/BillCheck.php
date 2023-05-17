@@ -12,6 +12,7 @@ class Billcheck extends CI_Controller {
         $this->load->library('form_validation');        
 		$this->load->model('Header_model');
         $this->load->model('Shipment_model');
+        $this->load->model('Details_model');
     }
 
 
@@ -55,16 +56,27 @@ class Billcheck extends CI_Controller {
 		$this->load->view('layout/footer');
 	}
 
-    public function pocheck($id)
-    {
-		//get data from Member_modal using getindex() methods
-        foreach ($this->Shipment_model->getindex() as $row) {
-            $options[$row->id] = $row->name;
-        }
+    // edit funcion
+	public function billone($shipment_id)
+	{
 		//get data from Member_modal using getindex() methods
         $data = array(
-            'header' => $this->Header_model->getHeader($id)[0], 
-            'options' => $options, 
+            'header' => $this->Header_model->getHeaderbyShipID($shipment_id)[0], 
+        );
+        //load view
+        $this->load->view('layout/header');
+		$this->load->view('billcheck/billone', $data);
+		$this->load->view('layout/footer');
+	}
+
+    public function pocheck($id)
+    {
+		$header = $this->Header_model->getHeader($id)[0];
+        $details = $this->Details_model->getAll($header->shipment_id);
+		//get data from Member_modal using getindex() methods
+        $data = array(
+            'header' => $header, 
+            'details' => $details, 
         );
         //load view
         $this->load->view('layout/header');
@@ -85,7 +97,7 @@ class Billcheck extends CI_Controller {
             redirect('billcheck/pocheck/'.$this->input->post('id'));
         } else {
             $this->session->set_flashdata('msg_error', 'save error');
-            redirect('billcheck/edit/'.$this->input->post('id'));
+            redirect('billcheck/billone/'.$this->input->post('id'));
         }
     }
     
@@ -99,7 +111,7 @@ class Billcheck extends CI_Controller {
            
         if ($this->Header_model->updateHeader(['po_check'=>1], $this->input->post('id'))  ) {
             $this->session->set_flashdata('msg_noti', 'Success CHECK Shipment Details');
-            redirect('billcheck/pocheck/'.$this->input->post('id'));
+            redirect('generators/one/'.$this->input->post('shipment_id'));
         } else {
             $this->session->set_flashdata('msg_error', 'save error');
             redirect('billcheck');

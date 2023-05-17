@@ -4,6 +4,7 @@
 </ol>
 <div class="row">
     <input type="hidden" name="container_id" id="container_id" value="<?php echo $container_id;?>">
+    <input type="hidden" name="shipment_id" id="shipment_id" value="<?php echo $shipment_id;?>">
     <button class="btn btn-primary" id="save_excel_button">Save</button>
 </div>
 <div class="row">

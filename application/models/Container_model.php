@@ -52,7 +52,7 @@ class Container_model extends CI_Model {
             from container 
             LEFT JOIN shipment 
                 on container.shipment_id = shipment.id
-            WHERE container.shipment_id = '.$ship_id.' AND container.name = '.$name.'
+            WHERE container.shipment_id = '.$ship_id.' AND container.name = "'.$name.'"
             '
         );
         

@@ -9,6 +9,7 @@
     <?php echo validation_errors(); ?>  
     <?php echo form_open('form'); ?> 
     <?php echo form_hidden('id', $detail->id);?>
+    <?php echo form_hidden('shipment_id', $detail->shipment_id);?>
     <?php echo form_hidden('container_id', $detail->container_id);?>
     <div class="form-group mt-3">
         <div class="row">
@@ -142,6 +143,7 @@
     <div class="row mt-5" style="justify-content: center;">
         <div class="col-md-3"></div>
         <div class="col-md-6">
+            <a class="btn btn-success" href="<?php echo site_url('/container/one/'.$detail->shipment_id)?>">Back</a>
             <button class="btn btn-primary" type="submit">SAVE Detail</button>
         </div>
         <div class="col-md-3"></div>

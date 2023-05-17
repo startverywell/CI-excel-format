@@ -163,6 +163,36 @@ select.list-dt:focus {
 }
 
 /*Icons in the ProgressBar*/
+#progressbar #shipment:before {
+    font-family: FontAwesome;
+    content: "\f21a";
+}
+
+#progressbar #header_icon:before {
+    font-family: FontAwesome;
+    content: "\f13d";
+}
+
+#progressbar #header_copy:before {
+    font-family: FontAwesome;
+    content: "\f0c5";
+}
+
+#progressbar #container:before {
+    font-family: FontAwesome;
+    content: "\f468";
+}
+
+#progressbar #packing:before {
+    font-family: FontAwesome;
+    content: "\e4c7";
+}
+
+#progressbar #download:before {
+    font-family: FontAwesome;
+    content: "\f019";
+}
+
 #progressbar #account:before {
     font-family: FontAwesome;
     content: "\f023";
