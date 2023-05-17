@@ -43,7 +43,7 @@
                                             </tr>
                                             <tr class="table-success">
                                                 <td>DATE ENTERED </td>
-                                                <td><?php echo $header->date_entered?></td>
+                                                <td><?php echo date('m-d-Y', strtotime($header->date_entered))?></td>
                                             </tr>
                                             <tr class="table-success">
                                                 <td>SHIPMENT TYPE</td>
@@ -63,11 +63,11 @@
                                             </tr>
                                             <tr class="table-info">
                                                 <td>BILL/INV DATE</td>
-                                                <td><?php echo $header->bill_date?></td>
+                                                <td><?php echo date('m-d-Y', strtotime($header->bill_date))?></td>
                                             </tr>
                                             <tr class="table-info">
                                                 <td>DOCS RCVD DATE</td>
-                                                <td><?php echo $header->docs_date?></td>
+                                                <td><?php echo date('m-d-Y', strtotime($header->docs_date))?></td>
                                             </tr>
                                             <tr class="table-info">
                                                 <td>Bill#</td>

@@ -29,7 +29,9 @@
                             <fieldset>
                                 <div class="form-card">
                                     <h2 class="fs-title mb-2">UPDATE QB PO's</h2>
-                                    <h4 class="mb-5"><?php echo $header->shipment_name?></h4>
+                                    <h4 class="mb-5">
+                                        <?php echo $header->shipment_name?> 
+                                    </h4>
                                     <div class="row">
                                         <!-- DataTable -->
                                         <table id="detail-table" class="table table-striped table-hover">
@@ -50,6 +52,7 @@
                                             <tbody>
                                             <?php 
                                                 $no = 1;
+                                                $pos = [];
                                                 if ($details != false) {
                                                     foreach ($details as $detali) {
                                                         echo '<tr>';
@@ -74,13 +77,18 @@
                                                                 </a>
                                                             </td>';
                                                         echo '</tr>';
+                                                        if($detali->po != '')
+                                                            $pos[$detali->po] = $detali->po;
                                                     }
                                                 }
+
+                                                $po_name = implode('-', $pos);
                                             ?>
                                             </tbody>
                                         </table>
                                         <!-- /.DataTable -->
                                     </div>
+                                    <h4 style="text-align:center;">PO#: <label style="color:red;"><?php echo $po_name?> </label></h4>
                                 </div>
                                 <a type="button" class="previous action-button-previous" href="<?php echo site_url('/billcheck/billone/'.$header->shipment_id)?>">Previous</a>
                                 <input type="submit" class="action-button" id="check_bill"  value="CREATE"/>

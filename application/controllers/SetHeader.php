@@ -110,13 +110,26 @@ class Setheader extends CI_Controller {
             $this->session->set_flashdata('msg_error', validation_errors());
             redirect('setheader/create');
         } 
-        else { 
-            if ($this->Header_model->createHeader($this->input->post())  ) {
-                $this->session->set_flashdata('msg_noti', 'Success create Shipment Header');
-                redirect('container/copy/'.$this->input->post('shipment_id'));
-            } else {
-                $this->session->set_flashdata('msg_error', 'save error');
-                redirect('setheader/create');
+        else {
+            $old_header = $this->Header_model->getHeaderbyShipID($this->input->post('shipment_id'));
+            if(!$old_header){
+                if ($this->Header_model->createHeader($this->input->post())  ) {
+                    $this->session->set_flashdata('msg_noti', 'Success create Shipment Header');
+                    redirect('container/copy/'.$this->input->post('shipment_id'));
+                } else {
+                    $this->session->set_flashdata('msg_error', 'save error');
+                    redirect('setheader/create');
+                }
+            }
+            else {
+                $id = $old_header[0];
+                if ($this->Header_model->updateHeader($this->input->post(),$id->id)) {
+                    $this->session->set_flashdata('msg_noti', 'Success create Shipment Header');
+                    redirect('container/copy/'.$this->input->post('shipment_id'));
+                } else {
+                    $this->session->set_flashdata('msg_error', 'save error');
+                    redirect('setheader/create');
+                }
             }
         } 
 	}

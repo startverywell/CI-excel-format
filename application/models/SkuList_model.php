@@ -83,7 +83,21 @@ class SkuList_model extends CI_Model {
         }
     }
 
-    public function checkSku($sku)
+    public function checkSku($sku, $qty)
+    {
+        $this->db->from('sku_list');
+        $this->db->where('sku', $sku);
+        $this->db->where('qty', $qty);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function checkSkuName($sku)
     {
         $this->db->from('sku_list');
         $this->db->where('sku', $sku);
@@ -156,19 +170,30 @@ class SkuList_model extends CI_Model {
         $objPHPExcel->setActiveSheetIndex(0);
         //---SET DATA
         $row = 6;
-        while ($objPHPExcel->getActiveSheet()->getCell('A'.$row)->getValue() != '' && $objPHPExcel->getActiveSheet()->getCell('A'.$row)->getValue() != NULL) {
+        $blank_count = 0;
+        while ($objPHPExcel->getActiveSheet()->getCell('A'.$row)->getValue() != '' && $objPHPExcel->getActiveSheet()->getCell('A'.$row)->getValue() != NULL && blank_count > 9) {
+            if($objPHPExcel->getActiveSheet()->getCell('A'.$row)->getValue() == '' || $objPHPExcel->getActiveSheet()->getCell('A'.$row)->getValue() == NULL){
+                $blank_count++;
+                $row++;
+                continue;
+            } else {
+                $blank_count = 0;
+            }
             $pl = [];
             $pl['sku'] = $objPHPExcel->getActiveSheet()->getCell('A'.$row)->getValue();
-            $pl['description'] = $objPHPExcel->getActiveSheet()->getCell('B'.$row)->getValue();
-            $pl['description2'] = $objPHPExcel->getActiveSheet()->getCell('C'.$row)->getValue();
-            $pl['qty'] = $objPHPExcel->getActiveSheet()->getCell('D'.$row)->getValue();
-            $pl['style'] = $objPHPExcel->getActiveSheet()->getCell('G'.$row)->getValue();
-            $pl['pack'] = $objPHPExcel->getActiveSheet()->getCell('H'.$row)->getValue();
-            $pl['length'] = $objPHPExcel->getActiveSheet()->getCell('I'.$row)->getValue();
-            $pl['width'] = $objPHPExcel->getActiveSheet()->getCell('J'.$row)->getValue();
-            $pl['height'] = $objPHPExcel->getActiveSheet()->getCell('K'.$row)->getValue();
-            $pl['weight'] = $objPHPExcel->getActiveSheet()->getCell('L'.$row)->getValue();
-            $this->createSkuList($pl);
+
+            if(!$this->checkSkuName($pl['sku'])){
+                $pl['description'] = $objPHPExcel->getActiveSheet()->getCell('B'.$row)->getValue();
+                $pl['description2'] = $objPHPExcel->getActiveSheet()->getCell('C'.$row)->getValue();
+                $pl['qty'] = $objPHPExcel->getActiveSheet()->getCell('D'.$row)->getValue();
+                $pl['style'] = $objPHPExcel->getActiveSheet()->getCell('G'.$row)->getValue();
+                $pl['pack'] = $objPHPExcel->getActiveSheet()->getCell('H'.$row)->getValue();
+                $pl['length'] = $objPHPExcel->getActiveSheet()->getCell('I'.$row)->getValue();
+                $pl['width'] = $objPHPExcel->getActiveSheet()->getCell('J'.$row)->getValue();
+                $pl['height'] = $objPHPExcel->getActiveSheet()->getCell('K'.$row)->getValue();
+                $pl['weight'] = $objPHPExcel->getActiveSheet()->getCell('L'.$row)->getValue();
+                $this->createSkuList($pl);
+            }
             $row++;
         }
         return true;

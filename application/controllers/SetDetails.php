@@ -223,10 +223,7 @@ class Setdetails extends CI_Controller {
                 for ($k=0; $k < count($data[$j]); $k++) { 
                     $detail_data[$header[$k]] = $data[$j][$k];
                 }
-                if(!$this->SkuList_model->checkSku($detail_data['style'])){
-                    $detail_data['pl_new'] = 1;
-                    $detail_data['pl_add_flag'] = 1;
-                }
+
                 if($detail_data['single_top'] != '' && $detail_data['single_top'] != 'no'){
                     $detail_data['single_top'] = 1;
                 }
@@ -236,6 +233,40 @@ class Setdetails extends CI_Controller {
                 if($detail_data['asst'] != '' && $detail_data['asst'] != 'no'){
                     $detail_data['asst'] = 1;
                 }
+
+                if($detail_data['single_top'] == 1 || $detail_data['multi_top'] == 1){
+                    $sku = $detail_data['notes'] ?? '';
+                    $qty = $detail_data['ctn'] ?? '';
+                } else if($detail_data['asst'] == 1) {
+                    $sku = $detail_data['style'] ?? '';
+                    $qty = $detail_data['pcs_carton'] ?? '';
+                }
+                else {
+                    $sku = $detail_data['style'] ?? '';
+                    $qty = $detail_data['total'] ?? '';
+                }
+
+                if(!$this->SkuList_model->checkSku($sku, $qty)){
+                    $detail_data['pl_new'] = 1;
+                    $detail_data['pl_add_flag'] = 1;
+
+                    // ADD 3PL LIST
+                    $pl = [];
+                    // check name
+                    $pl['sku'] = $this->SkuList_model->checkSkuName($sku) ? $sku.'-'.$qty : $sku;
+                    $pl['description'] = $detail_data['description'];
+                    $pl['description2'] = $detail_data['description2'];
+                    $pl['qty'] = $detail_data['pcs_carton'];
+                    $pl['style'] = '';
+                    $pl['pack'] = '';
+                    $pl['length'] = $detail_data['length'];
+                    $pl['width'] = $detail_data['width'];
+                    $pl['height'] = $detail_data['height'];
+                    $pl['weight'] = $detail_data['weight']; 
+                    $this->SkuList_model->createSkuList($pl);
+
+                }
+                
                 
                 $this->Details_model->createDetails($detail_data);
                 $detail_data = [];
@@ -267,10 +298,37 @@ class Setdetails extends CI_Controller {
         } 
         else { 
             if ($this->Details_model->updateDetails($this->input->post(), $id)  ) {
-                if(!$this->SkuList_model->checkSku($this->input->post('style'))){
+                if($this->input->post('single_top') == 1 || $this->input->post('multi_top') == 1){
+                    $sku = $this->input->post('notes') ?? '';
+                    $qty = $this->input->post('ctn') ?? '';
+                } else if($this->input->post('asst') == 1) {
+                    $sku = $this->input->post('style') ?? '';
+                    $qty = $this->input->post('pcs_carton') ?? '';
+                }
+                else {
+                    $sku = $this->input->post('style') ?? '';
+                    $qty = $this->input->post('total') ?? '';
+                }
+
+                if(!$this->SkuList_model->checkSku($sku, $qty)){
                     $this->Details_model->updateDetails(['pl_new'=>1], $id);
                     $this->Details_model->updateDetails(['pl_add_flag'=>1], $id);
+                    // ADD 3PL LIST
+                    $pl = [];
+                    // check name
+                    $pl['sku'] = $this->SkuList_model->checkSkuName($sku) ? $sku.'-'.$qty : $sku;
+                    $pl['description'] = $this->input->post('description');
+                    $pl['description2'] = $this->input->post('description2');
+                    $pl['qty'] = $this->input->post('pcs_carton');
+                    $pl['style'] = '';
+                    $pl['pack'] = '';
+                    $pl['length'] = $this->input->post('length');
+                    $pl['width'] = $this->input->post('width');
+                    $pl['height'] = $this->input->post('height');
+                    $pl['weight'] = $this->input->post('weight'); 
+                    $this->SkuList_model->createSkuList($pl);
                 }
+                
                 if($this->input->post('single_top') != 1){
                     $this->Details_model->updateDetails(['single_top'=>0], $id);
                 }

@@ -26,14 +26,17 @@
                             <!-- fieldsets -->
                             <fieldset></fieldset>
                             <fieldset>
-                                <div class="form-card">
+                                <div class="form-card mp-5">
                                     <h2 class="fs-title mb-2">ISL DETAIL</h2>
-                                    <div id="exampleParent"><!-- element with dynamically added styles -->
+                                    <h3 style="text-align:center; color:red">
+                                        Please Confirm ISL DETAILS
+                                    </h3>
+                                    <!-- <div id="exampleParent">
                                         <div id="example1"></div>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <a type="button" class="previous action-button-previous" href="<?php echo site_url('container/copy/'.$shipment_id)?>">Previous</a>
-                                <a href="<?php echo site_url('container/one/'.$shipment_id)?>" class="action-button" id="create_container">Next Step</a>
+                                <a href="<?php echo site_url('container/one/'.$shipment_id)?>" class="action-button" id="create_container">Confirm</a>
                             </fieldset>
                         </form>
                     </div>

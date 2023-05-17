@@ -168,6 +168,13 @@ class Generator_model extends CI_Model {
             $objPHPExcel->getActiveSheet()->SetCellValue('E'.$row, $sku); //SKU
             $objPHPExcel->getActiveSheet()->SetCellValue('F'.$row, $qty ?? ''); //QTY ???
             $objPHPExcel->getActiveSheet()->SetCellValue('G'.$row, $detail->po ?? ''); // Lot# ???
+            $objPHPExcel->getActiveSheet()->SetCellValue('L'.$row, 'systemset'); // LocationField3
+            $objPHPExcel->getActiveSheet()->SetCellValue('M'.$row, 'Pallet'); // LocationField4
+            $objPHPExcel->getActiveSheet()->SetCellValue('N'.$row, '48'); // COST
+            $objPHPExcel->getActiveSheet()->SetCellValue('O'.$row, '40'); // VarUoMavg
+            $objPHPExcel->getActiveSheet()->SetCellValue('P'.$row, '48'); // ASN or RMA
+            $objPHPExcel->getActiveSheet()->SetCellValue('Q'.$row, '100'); // TrackingNumber
+            $objPHPExcel->getActiveSheet()->SetCellValue('S'.$row, 'CreateMultipleMUs:False'); // MULabel
             $row++;
         }   
         $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel); 
