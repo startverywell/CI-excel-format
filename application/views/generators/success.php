@@ -17,8 +17,8 @@
                                 <li id="payment"><strong>SHIPMENT</strong></li>
                                 <li id="payment"><strong>ISL HEADER</strong></li>
                                 <li id="header_copy"><strong>HEADER COPY</strong></li>
-                                <li id="payment"><strong>ISL DETAIL</strong></li>
-                                <li id="confirm"><strong>PACKING LIST</strong></li>
+                                <li id="confirm"><strong>ISL DETAIL</strong></li>
+                                <li id="payment"><strong>CONTAINER/PACKING LIST</strong></li>
                                 <li id="confirm"><strong>CHECK BILL</strong></li>
                                 <li id="confirm"><strong>CHECK PO</strong></li>
                                 <li id="confirm"><strong>GENERATE</strong></li>

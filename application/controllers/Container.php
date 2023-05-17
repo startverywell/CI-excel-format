@@ -125,7 +125,7 @@ class Container extends CI_Controller {
             if ($this->Container_model->createContainer(['name'=>$this->input->post('name'),'shipment_id'=>$this->input->post('shipment_id')])  ) {
                 $this->session->set_flashdata('msg_noti', 'Success create Container');
                 $container = $this->Container_model->getContainersByName($this->input->post('shipment_id'), $this->input->post('name'))[0];
-                redirect('setdetails/one/'.$container->id);
+                redirect('container/one/'.$this->input->post('shipment_id'));
             } else {
                 $this->session->set_flashdata('msg_error', 'save error');
                 redirect('container/create');

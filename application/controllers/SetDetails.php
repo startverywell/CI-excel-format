@@ -40,12 +40,10 @@ class Setdetails extends CI_Controller {
 		$this->load->view('layout/footer');
 	}
 
-    public function one($container_id)
+    public function one($shipment_id)
 	{
-        $container = $this->Container_model->getContainer($container_id)[0];
         $data = array(
-            'header_title' => $container->shipment_name.':'.$container->name, 
-            'container_id' => $container_id,
+            'shipment_id' => $shipment_id,
         );
 		$this->load->view('layout/header');
 		$this->load->view('setdetail/one', $data);

@@ -125,7 +125,6 @@ class Generator_model extends CI_Model {
             }   
         }
 
-        $objPHPExcel->getActiveSheet()->SetCellValue('Y'.$row, 'ddddd');
         $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel); 
         $objWriter->save("public/uploads/".$header_data->shipment_name."/".$file_name.".xlsx");
         return $this->Shipment_model->updateShipment(['out_1_name'=>$file_name.".xlsx"],$header_data->shipment_id);

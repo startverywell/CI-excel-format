@@ -6,6 +6,14 @@ class SkuList_model extends CI_Model {
      * You can learn from Codeigniter 3 userguide about active record
      * Reference: https://www.codeigniter.com/userguide3/database/query_builder.html
      */
+    public function __construct()
+    {
+        parent::__construct();
+		$this->load->database();
+        $this->load->helper('url');       
+		$this->load->library('PHPExcel');
+    }
+
 	public function getIndex()
 	{
         $this->db->from('sku_list');
@@ -33,13 +41,6 @@ class SkuList_model extends CI_Model {
     }
     public function getSkuList($id)
     {
-        $this->db->select('
-            id, 
-            sku, 
-            description,
-            description2,
-            qty,
-        ');
         $this->db->from('sku_list');
         $this->db->where('id', $id);
         $query = $this->db->get();
@@ -93,5 +94,83 @@ class SkuList_model extends CI_Model {
         } else {
             return false;
         }
+    }
+
+    public function exportExcel()
+    {
+        $pls = $this->getIndex();
+        $file_name = "3PL-SKU-LIST - ".date('Y-m-d');
+        $inputFileName='uploads/template/3PL-SKU-LIST.xls';
+        /**Load$inputFileNametoaPHPExcelObject**/ 
+        $objPHPExcel=PHPExcel_IOFactory::load($inputFileName);
+        $objPHPExcel->getProperties() 
+            ->setCreator("Albert Cal")
+            ->setLastModifiedBy("Albert Cal") 
+            ->setTitle($file_name) 
+            ->setSubject($file_name) 
+            ->setDescription("3PL-SKU-LIST, generated using PHP classes.") 
+            ->setKeywords("office 2007 openxml php") 
+            ->setCategory('3PL-SKU-LIST');
+
+        //-----------------set header------------------------------
+        $objPHPExcel->setActiveSheetIndex(0);
+        //---SET DATA
+        $row = 4;
+        foreach ($pls as $name => $pl) {
+            $objPHPExcel->getActiveSheet()->SetCellValue('A'.$row, $pl->sku ?? '');
+            $objPHPExcel->getActiveSheet()->SetCellValue('B'.$row, $pl->description ?? '');
+            $objPHPExcel->getActiveSheet()->SetCellValue('C'.$row, $pl->description2 ?? '');
+            $objPHPExcel->getActiveSheet()->SetCellValue('D'.$row, $pl->qty ?? '');
+            $objPHPExcel->getActiveSheet()->SetCellValue('G'.$row, $pl->style ?? '');
+            $objPHPExcel->getActiveSheet()->SetCellValue('H'.$row, $pl->pack ?? '');
+            $objPHPExcel->getActiveSheet()->SetCellValue('I'.$row, $pl->length ?? '');
+            $objPHPExcel->getActiveSheet()->SetCellValue('J'.$row, $pl->width ?? '');
+            $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $pl->height ?? '');
+            $objPHPExcel->getActiveSheet()->SetCellValue('L'.$row, $pl->weight ?? '');
+            $row++;
+        }
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$file_name.'.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel); 
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function importExcel($file_name)
+    {
+        $inputFileName='./public/uploads/pl_list/'.$file_name;
+        $objPHPExcel=PHPExcel_IOFactory::load($inputFileName);
+        $objPHPExcel->getProperties() 
+            ->setCreator("Albert Cal")
+            ->setLastModifiedBy("Albert Cal") 
+            ->setTitle($file_name) 
+            ->setSubject($file_name) 
+            ->setDescription("3PL-SKU-LIST, generated using PHP classes.") 
+            ->setKeywords("office 2007 openxml php") 
+            ->setCategory('3PL-SKU-LIST');
+
+        //-----------------set header------------------------------
+        $objPHPExcel->setActiveSheetIndex(0);
+        //---SET DATA
+        $row = 6;
+        while ($objPHPExcel->getActiveSheet()->getCell('A'.$row)->getValue() != '' && $objPHPExcel->getActiveSheet()->getCell('A'.$row)->getValue() != NULL) {
+            $pl = [];
+            $pl['sku'] = $objPHPExcel->getActiveSheet()->getCell('A'.$row)->getValue();
+            $pl['description'] = $objPHPExcel->getActiveSheet()->getCell('B'.$row)->getValue();
+            $pl['description2'] = $objPHPExcel->getActiveSheet()->getCell('C'.$row)->getValue();
+            $pl['qty'] = $objPHPExcel->getActiveSheet()->getCell('D'.$row)->getValue();
+            $pl['style'] = $objPHPExcel->getActiveSheet()->getCell('G'.$row)->getValue();
+            $pl['pack'] = $objPHPExcel->getActiveSheet()->getCell('H'.$row)->getValue();
+            $pl['length'] = $objPHPExcel->getActiveSheet()->getCell('I'.$row)->getValue();
+            $pl['width'] = $objPHPExcel->getActiveSheet()->getCell('J'.$row)->getValue();
+            $pl['height'] = $objPHPExcel->getActiveSheet()->getCell('K'.$row)->getValue();
+            $pl['weight'] = $objPHPExcel->getActiveSheet()->getCell('L'.$row)->getValue();
+            $this->createSkuList($pl);
+            $row++;
+        }
+        return true;
     }
 }

@@ -37,7 +37,6 @@ class Dragdrop extends CI_Controller {
         
 		if ($this->form_validation->run() == TRUE) {
 			$name = "S#".$this->input->post('name');
-			mkdir('public/uploads/'. $name.'/'.$name, 0777, true);
 			if (!file_exists('public/uploads/'. $name.'/'.$name)) {
 				mkdir('public/uploads/'. $name.'/'.$name, 0777, true);
 			} 
@@ -61,17 +60,18 @@ class Dragdrop extends CI_Controller {
 				redirect('dragdrop/createone');
 			} 
 
-			//$this->upload->do_upload('input_4_name');
-			if (!$this->upload->do_upload('input_4_name')) {
-				$this->session->set_flashdata('msg_error', $this->upload->display_errors());
-				redirect('dragdrop/createone');
-			} 
+			if($_FILES['input_4_name']['name'] != NULL && $_FILES['input_4_name']['name'] != '') {
+				if (!$this->upload->do_upload('input_4_name')) {
+					$this->session->set_flashdata('msg_error', $this->upload->display_errors());
+					redirect('dragdrop/createone');
+				} 
+			}
 			$ship_data = array(
                 'name'      => $name,
 				'input_1_name' => $_FILES['input_1_name']['name'],
 				'input_2_name' => $_FILES['input_2_name']['name'],
 				'input_3_name' => $_FILES['input_3_name']['name'],
-				// 'input_4_name' => $_FILES['input_4_name']['name'],
+				'input_4_name' => $_FILES['input_4_name']['name'],
             );
 			
 			if ($this->Shipment_model->createShipment($ship_data)  ) {

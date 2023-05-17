@@ -24,6 +24,10 @@ class Header_model extends CI_Model {
     }
     public function createHeader($data)
     {
+        $data['date_entered'] = $this->changeDate($data['date_entered']);
+        $data['bill_date'] = $this->changeDate($data['bill_date']);
+        $data['docs_date'] = $this->changeDate($data['docs_date']);
+        
         $this->db->trans_start();
         $this->db->insert('shipment_header', $data);
         $this->db->trans_complete();
@@ -104,5 +108,12 @@ class Header_model extends CI_Model {
         else {
             return true;
         }
+    }
+
+    // convert mm-dd-yyyy to Y-m-d
+    private function changeDate($date)
+    {
+        $dates = explode('-', $date);
+        return $dates[2].'-'.$dates['0'].'-'.$dates[1];
     }
 }

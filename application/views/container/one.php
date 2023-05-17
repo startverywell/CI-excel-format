@@ -18,8 +18,8 @@
                                 <li id="shipment"><strong>SHIPMENT</strong></li>
                                 <li id="header_icon"><strong>ISL HEADER</strong></li>
                                 <li id="header_copy"><strong>HEADER COPY</strong></li>
-                                <li class="active" id="container"><strong>ISL DETAIL</strong></li>
-                                <li id="packing"><strong>PACKING LIST</strong></li>
+                                <li id="packing"><strong>ISL DETAIL</strong></li>
+                                <li class="active" id="container"><strong>CONTAINER/PACKING LIST</strong></li>
                                 <li id="confirm"><strong>CREATE QB BILL</strong></li>
                                 <li id="confirm"><strong>UPDATE QB PO's</strong></li>
                                 <li id="download"><strong>GENERATE</strong></li>
@@ -82,7 +82,9 @@
                                     </div>   
                                 </div>
                                 <!-- <input type="button" class="action-button-previous"/> -->
-                                <input type="submit" class="action-button" id="create_container" value="Next Step"/>
+                                <a type="button" class="previous action-button-previous" href="<?php echo site_url('setdetails/one/'.$shipment_id)?>">Previous</a>
+                                <input type="submit" class="action-button" id="create_container" value="SAVE"/>
+                                <a href="<?php echo site_url('billcheck/billone/'.$shipment_id)?>" class="action-button" id="create_container">Next Step</a>
                             </fieldset>
                         </form>
                     </div>

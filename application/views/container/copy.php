@@ -18,8 +18,8 @@
                                 <li id="shipment"><strong>SHIPMENT</strong></li>
                                 <li id="header_icon"><strong>ISL HEADER</strong></li>
                                 <li class="active" id="header_copy"><strong>HEADER COPY</strong></li>
-                                <li id="container"><strong>ISL DETAIL</strong></li>
-                                <li id="packing"><strong>PACKING LIST</strong></li>
+                                <li id="packing"><strong>ISL DETAIL</strong></li>
+                                <li id="container"><strong>CONTAINER/PACKING LIST</strong></li>
                                 <li id="confirm"><strong>CREATE QB BILL</strong></li>
                                 <li id="confirm"><strong>UPDATE QB PO's</strong></li>
                                 <li id="download"><strong>GENERATE</strong></li>
@@ -46,13 +46,13 @@
                                             <tbody>   
                                                 <tr class="table-primary">
                                                     <td><?php echo $header->shipment_name?></td>
-                                                    <td><?php echo $header->date_entered?></td>
+                                                    <td><?php echo date('m-d-Y', strtotime($header->date_entered))?></td>
                                                     <td><?php echo $header->shipment_type?></td>
                                                     <td><?php echo $header->factory?></td>
                                                     <td><?php echo $header->carrier?></td>
                                                     <td><?php echo $header->bl?></td>
-                                                    <td><?php echo $header->bill_date?></td>
-                                                    <td><?php echo $header->docs_date?></td>
+                                                    <td><?php echo date('m-d-Y', strtotime($header->bill_date))?></td>
+                                                    <td><?php echo date('m-d-Y', strtotime($header->docs_date))?></td>
                                                     <td><?php echo $header->bill?></td>
                                                     <td><?php echo $header->amount?></td>
                                                 </tr>
@@ -61,7 +61,7 @@
                                     </div>
                                 </div>
                                 <!-- <input type="button" class="action-button-previous"/> -->
-                                <a href="<?php echo site_url('container/one/'.$shipment_id)?>" class="action-button" id="create_container"/>Next Step</a>
+                                <a href="<?php echo site_url('setdetails/one/'.$shipment_id)?>" class="action-button" id="create_container">Next Step</a>
                             </fieldset>
                         </form>
                     </div>
