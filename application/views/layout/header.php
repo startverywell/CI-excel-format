@@ -57,6 +57,7 @@
                             <div class="collapse show" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="<?= site_url('pllist');?>">3PL LIST</a>
+                                    <a class="nav-link" href="<?= site_url('upc');?>">UPC LIST</a>
                                     <a class="nav-link" href="<?= site_url('dragdrop');?>">View Shipments</a>
                                     <a class="nav-link" href="<?= site_url('dragdrop/createone');?>">Create Shipments</a>
                                 </nav>

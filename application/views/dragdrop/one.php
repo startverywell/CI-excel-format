@@ -16,8 +16,8 @@
                                 <li id="header_copy"><strong>HEADER COPY</strong></li>
                                 <li id="packing"><strong>ISL DETAIL</strong></li>
                                 <li id="container"><strong>CONTAINER/PACKING LIST</strong></li>
-                                <li id="confirm"><strong>CREATE QB BILL</strong></li>
-                                <li id="confirm"><strong>UPDATE QB PO's</strong></li>
+                                <li id="confirm"><strong>CONFIRM QB BILL CREATED</strong></li>
+                                <li id="confirm"><strong>CONFIRM QB PO UPDATED</strong></li>
                                 <li id="download"><strong>GENERATE</strong></li>
                             </ul>
                             <!-- fieldsets -->

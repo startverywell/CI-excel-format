@@ -171,8 +171,8 @@ class SkuList_model extends CI_Model {
         //---SET DATA
         $row = 6;
         $blank_count = 0;
-        while ($objPHPExcel->getActiveSheet()->getCell('A'.$row)->getValue() != '' && $objPHPExcel->getActiveSheet()->getCell('A'.$row)->getValue() != NULL && blank_count > 9) {
-            if($objPHPExcel->getActiveSheet()->getCell('A'.$row)->getValue() == '' || $objPHPExcel->getActiveSheet()->getCell('A'.$row)->getValue() == NULL){
+        while ($objPHPExcel->getActiveSheet()->getCell('A'.$row)->getValue() != '' && $blank_count < 9) {
+            if($objPHPExcel->getActiveSheet()->getCell('A'.$row)->getValue() == '' ){
                 $blank_count++;
                 $row++;
                 continue;

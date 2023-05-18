@@ -7,7 +7,7 @@
     <div class="row justify-content-center mt-0">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 text-center p-0 mt-3 mb-2">
             <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
-                <h2><strong>UPDATE QB PO's</strong></h2>
+                <h2><strong>CONFIRM QB PO UPDATED</strong></h2>
                 <p>Click CHECK button to go to next step</p>
                 <div class="row">
                     <div class="col-md-12 mx-0">
@@ -21,17 +21,15 @@
                                 <li id="header_copy"><strong>HEADER COPY</strong></li>
                                 <li id="packing"><strong>ISL DETAIL</strong></li>
                                 <li id="container"><strong>CONTAINER/PACKING LIST</strong></li>
-                                <li id="confirm"><strong>CREATE QB BILL</strong></li>
-                                <li class="active" id="confirm"><strong>UPDATE QB PO's</strong></li>
+                                <li id="confirm"><strong>CONFIRM QB BILL CREATED</strong></li>
+                                <li class="active" id="confirm"><strong>CONFIRM QB PO UPDATED</strong></li>
                                 <li id="download"><strong>GENERATE</strong></li>
                             </ul>
                             <!-- fieldsets -->
                             <fieldset>
                                 <div class="form-card">
-                                    <h2 class="fs-title mb-2">UPDATE QB PO's</h2>
-                                    <h4 class="mb-5">
-                                        <?php echo $header->shipment_name?> 
-                                    </h4>
+                                    <h2 class="fs-title mb-2">CONFIRM QB PO UPDATED</h2>
+                                    <h4 class="mb-5"><?php echo $header->shipment_name?></h4>
                                     <div class="row">
                                         <!-- DataTable -->
                                         <table id="detail-table" class="table table-striped table-hover">

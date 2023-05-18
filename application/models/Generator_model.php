@@ -12,6 +12,7 @@ class Generator_model extends CI_Model {
         $this->load->model('Details_model');
         $this->load->model('Container_model');
         $this->load->model('Shipment_model');
+        $this->load->model('Upc_model');
     }
 
 	public function get_data()
@@ -203,10 +204,15 @@ class Generator_model extends CI_Model {
         for ($i=0; $i < count($container); $i++) { 
             $detail = $container[$i];
             if ($detail->pl_new == 1) {
+                if($detail->upc == ''){
+                    $upc = $this->Upc_model->getUpcBySku($detail->style)[0];
+                    $upc = $upc->upc ?? '';
+                } else
+                    $upc = $detail->upc;
                 $objPHPExcel->getActiveSheet()->SetCellValue('A'.$row, $detail->style ?? ''); //sku
                 $objPHPExcel->getActiveSheet()->SetCellValue('B'.$row, $detail->description ?? ''); // description
                 $objPHPExcel->getActiveSheet()->SetCellValue('C'.$row, $detail->description2); // description2
-                $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $detail->upc ?? ''); // UPC
+                $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $upc ?? ''); // UPC
                 $objPHPExcel->getActiveSheet()->SetCellValue('O'.$row, $detail->asst == 1 ? 'each' : 'carton'); // Primary Unit of Measure
                 $objPHPExcel->getActiveSheet()->SetCellValue('Q'.$row, $detail->asst == 1 ? '1' : $detail->pcs_carton ?? ''); // Packing UoM QTY
                 $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $detail->length ?? ''); // length

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pllist extends CI_Controller {
+class Upc extends CI_Controller {
 
 	public function __construct()
     {
@@ -10,17 +10,17 @@ class Pllist extends CI_Controller {
         $this->load->helper('url');
         $this->load->library('session');
         $this->load->library('form_validation');        
-		$this->load->model('SkuList_model');
+		$this->load->model('Upc_model');
     }
 
 
 	public function index()
 	{
         $data = array(
-            'pl_list' => $this->SkuList_model->getIndex(), 
+            'upc_list' => $this->Upc_model->getIndex(), 
         );
 		$this->load->view('layout/header');
-		$this->load->view('pll_list/index', $data);
+		$this->load->view('upc/index', $data);
 		$this->load->view('layout/footer');
 	}
 
@@ -29,11 +29,11 @@ class Pllist extends CI_Controller {
 	{
 		//get data from Member_modal using getindex() methods
         $data = array(
-            'pl' => $this->SkuList_model->getSkuList($id)[0], 
+            'upc' => $this->Upc_model->getUpc($id)[0], 
         );
         //load view
         $this->load->view('layout/header');
-		$this->load->view('pll_list/view', $data);
+		$this->load->view('upc/view', $data);
 		$this->load->view('layout/footer');
 	}
 
@@ -42,11 +42,11 @@ class Pllist extends CI_Controller {
 	{
 		//get data from Member_modal using getindex() methods
         $data = array(
-            'pl' => $this->SkuList_model->getSkuList($id)[0], 
+            'upc' => $this->Upc_model->getUpc($id)[0], 
         );
         //load view
         $this->load->view('layout/header');
-		$this->load->view('pll_list/update', $data);
+		$this->load->view('upc/update', $data);
 		$this->load->view('layout/footer');
 	}
 
@@ -54,7 +54,7 @@ class Pllist extends CI_Controller {
 	public function create()
     {
         $this->load->view('layout/header');
-		$this->load->view('pll_list/create');
+		$this->load->view('upc/create');
 		$this->load->view('layout/footer');
     }
 
@@ -68,20 +68,19 @@ class Pllist extends CI_Controller {
            
         /* Set validation rule for name field in the form */ 
         $this->form_validation->set_rules('sku', 'SKU', 'required'); 
-        $this->form_validation->set_rules('description', 'Description', 'required'); 
-        $this->form_validation->set_rules('qty', 'Packing UoM QTY', 'required'); 
+        $this->form_validation->set_rules('upc', 'UPC', 'required'); 
            
         if ($this->form_validation->run() == FALSE) { 
             $this->session->set_flashdata('msg_error', validation_errors());
-            redirect('plist/create');
+            redirect('upc/create');
         } 
         else { 
-            if ($this->SkuList_model->createSkuList($this->input->post())  ) {
-                $this->session->set_flashdata('msg_noti', 'Success create new 3PL');
-                redirect('pllist');
+            if ($this->Upc_model->createUpc($this->input->post())  ) {
+                $this->session->set_flashdata('msg_noti', 'Success create new UPC');
+                redirect('upc');
             } else {
                 $this->session->set_flashdata('msg_error', 'save error');
-                redirect('pllist/create');
+                redirect('upc/create');
             }
         } 
     }
@@ -96,20 +95,19 @@ class Pllist extends CI_Controller {
            
         /* Set validation rule for name field in the form */ 
         $this->form_validation->set_rules('sku', 'SKU', 'required'); 
-        $this->form_validation->set_rules('description', 'Description', 'required'); 
-        $this->form_validation->set_rules('qty', 'Packing UoM QTY', 'required'); 
+        $this->form_validation->set_rules('upc', 'UPC', 'required'); 
            
         if ($this->form_validation->run() == FALSE) { 
             $this->session->set_flashdata('msg_error', validation_errors());
-            redirect('plist');
+            redirect('upc');
         } 
         else { 
-            if ($this->SkuList_model->updateSkuList($this->input->post(),$this->input->post('id'))  ) {
-                $this->session->set_flashdata('msg_noti', 'Success update new 3PL');
-                redirect('pllist');
+            if ($this->Upc_model->updateUpc($this->input->post(),$this->input->post('id'))  ) {
+                $this->session->set_flashdata('msg_noti', 'Success update UPC');
+                redirect('upc');
             } else {
                 $this->session->set_flashdata('msg_error', 'save error');
-                redirect('pllist');
+                redirect('upc');
             }
         } 
     }
@@ -118,53 +116,53 @@ class Pllist extends CI_Controller {
     public function delete($id)
 	{
 		//get data from Member_modal using getindex() methods
-        if($this->SkuList_model->deleteSkuList($id)){
+        if($this->Upc_model->deleteUpc($id)){
             $this->session->set_flashdata('msg_noti', 'Success delete item');
         } else {
             $this->session->set_flashdata('msg_error', 'delete error');
         }
-        redirect('pllist');
+        redirect('upc');
 	}
 
-    // export excel
-    public function export()
-    {
-        if($this->SkuList_model->exportExcel()){
-            $this->session->set_flashdata('msg_noti', 'Success download');
-            redirect('pllist');
-        } else {
-            $this->session->set_flashdata('msg_error', 'Download error');
-            redirect('pllist');
-        }
-    }
+    // // export excel
+    // public function export()
+    // {
+    //     if($this->Upc_model->exportExcel()){
+    //         $this->session->set_flashdata('msg_noti', 'Success download');
+    //         redirect('upc');
+    //     } else {
+    //         $this->session->set_flashdata('msg_error', 'Download error');
+    //         redirect('upc');
+    //     }
+    // }
 
     // import excel
     public function import()
     {
         $this->load->view('layout/header');
-		$this->load->view('pll_list/import');
+		$this->load->view('upc/import');
 		$this->load->view('layout/footer');
     }
 
     // import data
     public function importData()
     {
-        $name = 'PL_LIST_'.date('Y-m-d');
-        if (!file_exists('public/uploads/pl_list')) {
-            mkdir('public/uploads/pl_list', 0777, true);
+        $name = 'UPC_'.date('Y-m-d');
+        if (!file_exists('public/uploads/upc_list')) {
+            mkdir('public/uploads/upc_list', 0777, true);
         } 
 
-        $config['upload_path'] = './public/uploads/pl_list/';
+        $config['upload_path'] = './public/uploads/upc_list/';
         $config['allowed_types'] = 'xlsx|xls|';
-        $config['file_name'] = 'PL_LIST_'.date('Y-m-d');
+        $config['file_name'] = 'UPC_'.date('Y-m-d');
 
         $this->load->library('upload', $config);
-        if (!$this->upload->do_upload('upload_pl')) {
+        if (!$this->upload->do_upload('upload_upc')) {
             $this->session->set_flashdata('msg_error', $this->upload->display_errors());
-            redirect('pllist/import');
+            redirect('upc/import');
         } 
-        $extension = pathinfo($_FILES['upload_pl']['name'], PATHINFO_EXTENSION);
-        $c = $this->SkuList_model->importExcel($name.".".$extension);
-        redirect('pllist');
+        $extension = pathinfo($_FILES['upload_upc']['name'], PATHINFO_EXTENSION);
+        $this->Upc_model->importExcel($name.".".$extension);
+        redirect('upc');
     }
 }

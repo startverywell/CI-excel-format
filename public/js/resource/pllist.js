@@ -6,4 +6,10 @@ $(document).ready(function() {
         file_name = fake_path.split("\\").pop();
         $('#name_pl').text(file_name + " file(s) selected");
     });
+
+    $('#upload_upc').change(function() {
+        fake_path = document.getElementById('upload_upc').value;
+        file_name = fake_path.split("\\").pop();
+        $('#name_upc').text(file_name + " file(s) selected");
+    });
 });
