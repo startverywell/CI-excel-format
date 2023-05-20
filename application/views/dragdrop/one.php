@@ -17,7 +17,7 @@
                                 <li id="packing"><strong>ISL DETAIL</strong></li>
                                 <li id="container"><strong>CONTAINER/PACKING LIST</strong></li>
                                 <li id="confirm"><strong>CONFIRM QB BILL CREATED</strong></li>
-                                <li id="confirm"><strong>CONFIRM QB PO UPDATED</strong></li>
+                                <li id="confirm"><strong>REVIEW CONTAINERS</strong></li>
                                 <li id="download"><strong>GENERATE</strong></li>
                             </ul>
                             <!-- fieldsets -->
@@ -55,7 +55,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="card bg-danger text-white mb-4">
-                                                <input class="file-upload" id="upload4" name="input_4_name" type="file" value="">
+                                                <input class="file-upload" id="upload4" name="input_4_name[]" type="file" value="" multiple>
                                                 <p class="card-body" id="name4">Drag your extra file here or click in this area.
                                                 </p>
                                             </div>

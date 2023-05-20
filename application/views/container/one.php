@@ -21,7 +21,7 @@
                                 <li id="packing"><strong>ISL DETAIL</strong></li>
                                 <li class="active" id="container"><strong>CONTAINER/PACKING LIST</strong></li>
                                 <li id="confirm"><strong>CONFIRM QB BILL CREATED</strong></li>
-                                <li id="confirm"><strong>CONFIRM QB PO UPDATED</strong></li>
+                                <li id="confirm"><strong>REVIEW CONTAINERS</strong></li>
                                 <li id="download"><strong>GENERATE</strong></li>
                             </ul>
                             <!-- fieldsets -->

@@ -1,6 +1,16 @@
 <?php
     $this->load->helper('form');
+    $pos = [];
+    if ($details != false) {
+        foreach ($details as $detali) {
+            if($detali->po != '')
+                $pos[$detali->po] = $detali->po;
+        }
+    }
+
+    $po_name = implode('-', $pos);
 ?>
+
 <link rel="stylesheet" href="<?php echo base_url();?>public/css/one.css">
 <!-- MultiStep Form -->
 <div class="container-fluid" id="grad1">
@@ -21,7 +31,7 @@
                                 <li id="packing"><strong>ISL DETAIL</strong></li>                           
                                 <li id="container"><strong>CONTAINER/PACKING LIST</strong></li>
                                 <li class="active" id="confirm"><strong>CONFIRM QB BILL CREATED</strong></li>
-                                <li id="confirm"><strong>CONFIRM QB PO UPDATED</strong></li>
+                                <li id="confirm"><strong>REVIEW CONTAINERS</strong></li>
                                 <li id="download"><strong>GENERATE</strong></li>
                             </ul>
                             <!-- fieldsets -->
@@ -87,6 +97,12 @@
                                                 <td>PO# CHECK</td>
                                                 <td>
                                                     <?php echo ($header->po_check==1 ? '<i class="fa-solid fa-check" style="color: #2df41f;"></i>' :'<i class="fa-solid fa-xmark" style="color: red;"></i>'); ?>
+                                                </td>
+                                            </tr>
+                                            <tr class="table-danger">
+                                                <td>PO# </td>
+                                                <td>
+                                                    <?php echo $po_name; ?>
                                                 </td>
                                             </tr>
                                         </tbody>

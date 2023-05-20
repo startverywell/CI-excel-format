@@ -137,8 +137,9 @@ class Generator_model extends CI_Model {
         $inputFileName='uploads/template/Receiver Upload.xlsx';
         /**Load$inputFileNametoaPHPExcelObject**/ 
         $objPHPExcel=PHPExcel_IOFactory::load($inputFileName);
-        
-        $file_name = "Receiver Upload ".$header_data->shipment_name."- ".$container_name;
+        $entered_date = date('m.d.yy', strtotime($header_data->date_entered));
+        //Receiver Upload #6130 - 10.12.22 - TGHU0169472
+        $file_name = "Receiver Upload ".str_replace('S#','#', $header_data->shipment_name)." - ".$entered_date.' - '.$container_name;
         /**Create anew PHPExcelObject**/ 
         // $objPHPExcel=new PHPExcel();
         $objPHPExcel->getProperties() 
@@ -158,7 +159,7 @@ class Generator_model extends CI_Model {
                 $qty = $detail->ctn ?? '';
             } else if($detail->asst == 1) {
                 $sku = $detail->style ?? '';
-                $qty = $detail->pcs_carton ?? '';
+                $qty = $detail->ctn ?? '';
             }
             else {
                 $sku = $detail->style ?? '';
@@ -185,7 +186,10 @@ class Generator_model extends CI_Model {
 
     public function makeMaster($header_data, $container,$container_name)
     {
-        $file_name = "MASTER FILE IMPORT FILE - ".$header_data->shipment_name."- ".$container_name;
+        // MASTER FILE IMPORT FILE - #6130X 10.12.22 - TGHU0169472
+        $entered_date = date('m.d.yy', strtotime($header_data->date_entered));
+        //Receiver Upload #6130 - 10.12.22 - TGHU0169472
+        $file_name = "MASTER FILE IMPORT FILE - ".str_replace('S#','#', $header_data->shipment_name)."X ".$entered_date.' - '.$container_name;
         $inputFileName='uploads/template/MASTER FILE IMPORT FILE.xls';
         /**Load$inputFileNametoaPHPExcelObject**/ 
         $objPHPExcel=PHPExcel_IOFactory::load($inputFileName);
@@ -204,21 +208,31 @@ class Generator_model extends CI_Model {
         for ($i=0; $i < count($container); $i++) { 
             $detail = $container[$i];
             if ($detail->pl_new == 1) {
-                if($detail->upc == ''){
-                    $upc = $this->Upc_model->getUpcBySku($detail->style)[0];
-                    $upc = $upc->upc ?? '';
-                } else
+                // if($detail->upc == ''){
+                //     $upc = $this->Upc_model->getUpcBySku($detail->style)[0];
+                //     $upc = $upc->upc ?? '';
+                // } else
                     $upc = $detail->upc;
                 $objPHPExcel->getActiveSheet()->SetCellValue('A'.$row, $detail->style ?? ''); //sku
                 $objPHPExcel->getActiveSheet()->SetCellValue('B'.$row, $detail->description ?? ''); // description
                 $objPHPExcel->getActiveSheet()->SetCellValue('C'.$row, $detail->description2); // description2
                 $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $upc ?? ''); // UPC
+                $objPHPExcel->getActiveSheet()->SetCellValue('L'.$row, 'TRUE'); // 
+                $objPHPExcel->getActiveSheet()->SetCellValue('M'.$row, 'FALSE'); //
+                $objPHPExcel->getActiveSheet()->SetCellValue('N'.$row, 'FALSE'); //
                 $objPHPExcel->getActiveSheet()->SetCellValue('O'.$row, $detail->asst == 1 ? 'each' : 'carton'); // Primary Unit of Measure
+                $objPHPExcel->getActiveSheet()->SetCellValue('P'.$row, 'Carton'); //
                 $objPHPExcel->getActiveSheet()->SetCellValue('Q'.$row, $detail->asst == 1 ? '1' : $detail->pcs_carton ?? ''); // Packing UoM QTY
-                $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $detail->length ?? ''); // length
-                $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $detail->width ?? ''); // width
-                $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $detail->height ?? ''); // height
-                $objPHPExcel->getActiveSheet()->SetCellValue('K'.$row, $detail->weight ?? ''); // weight
+                $objPHPExcel->getActiveSheet()->SetCellValue('R'.$row, $detail->length ?? ''); // length
+                $objPHPExcel->getActiveSheet()->SetCellValue('S'.$row, $detail->width ?? ''); // width
+                $objPHPExcel->getActiveSheet()->SetCellValue('T'.$row, $detail->height ?? ''); // height
+                $objPHPExcel->getActiveSheet()->SetCellValue('U'.$row, $detail->weight ?? ''); // weight
+                $objPHPExcel->getActiveSheet()->SetCellValue('Z'.$row, 'TRUE'); // 
+                $objPHPExcel->getActiveSheet()->SetCellValue('AA'.$row, 'FALSE'); //
+                $objPHPExcel->getActiveSheet()->SetCellValue('AB'.$row, 'FALSE'); //
+                $objPHPExcel->getActiveSheet()->SetCellValue('AC'.$row, 'FALSE'); //
+                $objPHPExcel->getActiveSheet()->SetCellValue('AD'.$row, 'FALSE'); //
+                $objPHPExcel->getActiveSheet()->SetCellValue('AE'.$row, 'FALSE'); //
                 $row++;
             }
             
@@ -230,21 +244,35 @@ class Generator_model extends CI_Model {
 
     public function makePLS($header_data,$container_name)
     {
-        $file_name = "PL ".$header_data->shipment_name." Cont ".$container_name;
-        /**Create anew PHPExcelObject**/ 
-        $objPHPExcel=new PHPExcel();
-        $objPHPExcel->getProperties() 
-            ->setCreator("Albert Cal")
-            ->setLastModifiedBy("Albert Cal") 
-            ->setTitle($file_name) 
-            ->setSubject($file_name) 
-            ->setDescription("PL S# XXXX Cont # XXX, generated using PHP classes.") 
-            ->setKeywords("office 2007 openxml php") 
-            ->setCategory($header_data->shipment_name);
+        $shipment_data = $this->Shipment_model->getShipment($header_data->shipment_id)[0];
+
+        $file_path = './public/uploads/'.$shipment_data->name.'/'.$shipment_data->name.'/'.$shipment_data->input_3_name; // Set the source file path
+        $extension = explode('.',$shipment_data->input_3_name)[1];
+        //PL S# 6130 Cont # TGHU0169472
+        $file_name = "PL ".str_replace('S#','S# ', $header_data->shipment_name)." Cont ".$container_name.'.'.$extension;
+        $destination_path = "./public/uploads/".$header_data->shipment_name."/".$container_name."/".$file_name; // Set the destination file path
         
-        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel); 
-        $objWriter->save("public/uploads/".$header_data->shipment_name."/".$container_name."/".$file_name.".xlsx");
-        return $this->Shipment_model->updateShipment(['out_4_name'=>$file_name.".xlsx"],$header_data->shipment_id);
+        // Copy the file using the CodeIgniter copy() function
+        if (copy($file_path, $destination_path)) {
+            return $this->Shipment_model->updateShipment(['out_4_name'=>$file_name],$header_data->shipment_id);
+        } else {
+            echo 'Unable to copy file.';
+        }
+        
+        // /**Create anew PHPExcelObject**/ 
+        // $objPHPExcel=new PHPExcel();
+        // $objPHPExcel->getProperties() 
+        //     ->setCreator("Albert Cal")
+        //     ->setLastModifiedBy("Albert Cal") 
+        //     ->setTitle($file_name) 
+        //     ->setSubject($file_name) 
+        //     ->setDescription("PL S# XXXX Cont # XXX, generated using PHP classes.") 
+        //     ->setKeywords("office 2007 openxml php") 
+        //     ->setCategory($header_data->shipment_name);
+        
+        // $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel); 
+        // $objWriter->save("public/uploads/".$header_data->shipment_name."/".$container_name."/".$file_name.".xlsx");
+        // return $this->Shipment_model->updateShipment(['out_4_name'=>$file_name.".xlsx"],$header_data->shipment_id);
     }
 
 }

@@ -61,17 +61,37 @@ class Dragdrop extends CI_Controller {
 			} 
 
 			if($_FILES['input_4_name']['name'] != NULL && $_FILES['input_4_name']['name'] != '') {
-				if (!$this->upload->do_upload('input_4_name')) {
-					$this->session->set_flashdata('msg_error', $this->upload->display_errors());
-					redirect('dragdrop/createone');
-				} 
+				$countfiles = count($_FILES['input_4_name']['name']);
+				$totalFileUploaded = 0;
+				for($i=0;$i<$countfiles;$i++){
+					$filename = str_replace(' ','_', $_FILES['input_4_name']['name'][$i]);
+					## Location
+					$location = $config['upload_path'].$filename;
+					$extension = pathinfo($location,PATHINFO_EXTENSION);
+					$extension = strtolower($extension);
+					## File upload allowed extensions
+					$valid_extensions = array("xlsx","xls","png","pdf","docx");
+					$response = 0;
+					## Check file extension
+					if(in_array(strtolower($extension), $valid_extensions)) {
+						## Upload file
+						if(move_uploaded_file($_FILES['input_4_name']['tmp_name'][$i],$location)){
+							$totalFileUploaded++;
+						}
+					}
+				}
+
+				// if (!$this->upload->do_upload('input_4_name')) {
+				// 	$this->session->set_flashdata('msg_error', $this->upload->display_errors());
+				// 	redirect('dragdrop/createone');
+				// } 
 			}
 			$ship_data = array(
                 'name'      => $name,
-				'input_1_name' => $_FILES['input_1_name']['name'],
-				'input_2_name' => $_FILES['input_2_name']['name'],
-				'input_3_name' => $_FILES['input_3_name']['name'],
-				'input_4_name' => $_FILES['input_4_name']['name'],
+				'input_1_name' => str_replace(' ','_', $_FILES['input_1_name']['name']),
+				'input_2_name' => str_replace(' ','_', $_FILES['input_2_name']['name']),
+				'input_3_name' => str_replace(' ','_', $_FILES['input_3_name']['name']),
+				// 'input_4_name' => $_FILES['input_4_name']['name'],
             );
 			
 			if ($this->Shipment_model->createShipment($ship_data)  ) {

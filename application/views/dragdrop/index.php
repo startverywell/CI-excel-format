@@ -40,10 +40,13 @@
                             <a class="btn" href="'.site_url('/dragdrop/read/'.$shipData->id).'">
                                 <i class="fa-solid fa-eye" style="color: green;"></i> 
                                 Read
-                            </a> 
+                            </a> href="<?php echo ?>"
                             <a class="btn" href="'.site_url('/dragdrop/edit/'.$shipData->id).'">
                             <i class="fa-regular fa-pencil" style="color: red;"></i>
                             Edit</a>
+                            <a class="btn" href="'.site_url('/billcheck/billone/'.$shipData->id).'">
+                            <i class="fa-regular fa-pencil" style="color: red;"></i>
+                            Files</a>
                             <a class="btn" href="'.site_url('/dragdrop/delete/'.$shipData->id).'">
                             <i class="fa-regular fa-trash-can" style="color: red;"></i>
                             Delete</a>

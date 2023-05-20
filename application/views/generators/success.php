@@ -19,8 +19,8 @@
                                 <li id="header_copy"><strong>HEADER COPY</strong></li>
                                 <li id="confirm"><strong>ISL DETAIL</strong></li>
                                 <li id="payment"><strong>CONTAINER/PACKING LIST</strong></li>
-                                <li id="confirm"><strong>CHECK BILL</strong></li>
-                                <li id="confirm"><strong>CHECK PO</strong></li>
+                                <li id="confirm"><strong>CREATE QB BILL</strong></li>
+                                <li id="confirm"><strong>REVIEW CONTAINERS</strong></li>
                                 <li id="confirm"><strong>GENERATE</strong></li>
                                 <li class="active" id="confirm"><strong>SUCCESS</strong></li>
                             </ul>

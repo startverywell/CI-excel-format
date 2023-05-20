@@ -36,30 +36,12 @@
                 <td><?php echo $detail->total?></td>
                 <td>UOM :</td>
                 <td><?php echo $detail->uom?></td>
-                <td>DS :</td>
-                <td><?php echo $detail->ds?></td>
-            </tr>
-            <tr class="table-default">
-                <td>CUSTOMER :</td>
-                <td><?php echo $detail->customer?></td>
-                <td>SHIP :</td>
-                <td><?php echo $detail->ship?></td>
-                <td>CANCEL :</td>
-                <td><?php echo $detail->cancel?></td>
-                <td>CUSTOMER PO :</td>
-                <td><?php echo $detail->customer_po?></td>
-                <td>SO :</td>
-                <td><?php echo $detail->so?></td>
-                <td>INV :</td>
-                <td><?php echo $detail->inv?></td>
-            </tr>
-            <tr class="table-warning">
-                <td>EXT REQ :</td>
-                <td><?php echo $detail->ext_req?></td>
                 <td>RCVD :</td>
                 <td><?php echo $detail->rcvd?></td>
-                <td>SHORT/OVER :</td>
-                <td><?php echo $detail->short_over?></td>
+            </tr>
+            <tr class="table-warning">
+                <td>UPC :</td>
+                <td colspan='5'><?php echo $detail->upc?></td>
                 <td>NOTES :</td>
                 <td colspan='5'><?php echo $detail->notes?></td> 
             </tr>

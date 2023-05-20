@@ -62,6 +62,7 @@ class Billcheck extends CI_Controller {
 		//get data from Member_modal using getindex() methods
         $data = array(
             'header' => $this->Header_model->getHeaderbyShipID($shipment_id)[0], 
+            'details' => $this->Details_model->getAll($shipment_id),
         );
         //load view
         $this->load->view('layout/header');
