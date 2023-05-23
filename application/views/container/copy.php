@@ -20,7 +20,7 @@
                                 <li class="active" id="header_copy"><strong>HEADER COPY</strong></li>
                                 <li id="packing"><strong>ISL DETAIL</strong></li>
                                 <li id="container"><strong>CONTAINER/PACKING LIST</strong></li>
-                                <li id="confirm"><strong>CONFIRM QB BILL CREATED</strong></li>
+                                <li id="confirm"><strong>QB WORK</strong></li>
                                 <li id="confirm"><strong>REVIEW CONTAINERS</strong></li>
                                 <li id="download"><strong>GENERATE</strong></li>
                             </ul>
@@ -46,13 +46,13 @@
                                             <tbody>   
                                                 <tr class="table-primary">
                                                     <td><?php echo $header->shipment_name?></td>
-                                                    <td><?php echo date('m-d-Y', strtotime($header->date_entered))?></td>
+                                                    <td><?php echo date('m/d/Y', strtotime($header->date_entered))?></td>
                                                     <td><?php echo $header->shipment_type?></td>
                                                     <td><?php echo $header->factory?></td>
                                                     <td><?php echo $header->carrier?></td>
                                                     <td><?php echo $header->bl?></td>
-                                                    <td><?php echo date('m-d-Y', strtotime($header->bill_date))?></td>
-                                                    <td><?php echo date('m-d-Y', strtotime($header->docs_date))?></td>
+                                                    <td><?php echo date('m/d/Y', strtotime($header->bill_date))?></td>
+                                                    <td><?php echo date('m/d/Y', strtotime($header->docs_date))?></td>
                                                     <td><?php echo $header->bill?></td>
                                                     <td><?php echo $header->amount?></td>
                                                 </tr>

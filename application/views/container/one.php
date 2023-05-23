@@ -20,7 +20,7 @@
                                 <li id="header_copy"><strong>HEADER COPY</strong></li>
                                 <li id="packing"><strong>ISL DETAIL</strong></li>
                                 <li class="active" id="container"><strong>CONTAINER/PACKING LIST</strong></li>
-                                <li id="confirm"><strong>CONFIRM QB BILL CREATED</strong></li>
+                                <li id="confirm"><strong>QB WORK</strong></li>
                                 <li id="confirm"><strong>REVIEW CONTAINERS</strong></li>
                                 <li id="download"><strong>GENERATE</strong></li>
                             </ul>
@@ -28,8 +28,19 @@
                             <fieldset></fieldset>
                             <fieldset>
                                 <div class="form-card">
-                                    <h2 class="fs-title mb-5">CONTAINER Information</h2>
-                                    <input type="text" id= "name" name="name" placeholder="CONTAINER NAME"/>
+                                    <h2 class="fs-title mb-5">CONTAINER/PACKING LIST</h2>
+                                    <div class="row">
+                                        <div class="col-2"></div>
+                                        <div class="col-2">
+                                            <label class="pay" style="padding-top:6px;">ADD NEW CONTAINER NAME</label>
+                                        </div>
+                                        <div class="col-4">
+                                            <?php echo form_input(array('name' => 'name','class'=>"form-control", 'style'=>'border:solid !important;', 'placeholder'=>"CONTAINER NAME"));?>
+                                        </div>
+                                        <div class="col-1">
+                                            <input type="submit" class="btn btn-primary" id="create_container" value="SAVE" style="padding-top:3px; color:white;"/>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <!-- DataTable -->
                                         <table id="container-table" class="table table-striped table-hover">
@@ -83,7 +94,7 @@
                                 </div>
                                 <!-- <input type="button" class="action-button-previous"/> -->
                                 <a type="button" class="previous action-button-previous" href="<?php echo site_url('setdetails/one/'.$shipment_id)?>">Previous</a>
-                                <input type="submit" class="action-button" id="create_container" value="SAVE"/>
+                                
                                 <a href="<?php echo site_url('billcheck/billone/'.$shipment_id)?>" class="action-button" id="create_container">Next Step</a>
                             </fieldset>
                         </form>

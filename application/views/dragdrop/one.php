@@ -16,7 +16,7 @@
                                 <li id="header_copy"><strong>HEADER COPY</strong></li>
                                 <li id="packing"><strong>ISL DETAIL</strong></li>
                                 <li id="container"><strong>CONTAINER/PACKING LIST</strong></li>
-                                <li id="confirm"><strong>CONFIRM QB BILL CREATED</strong></li>
+                                <li id="confirm"><strong>QB WORK</strong></li>
                                 <li id="confirm"><strong>REVIEW CONTAINERS</strong></li>
                                 <li id="download"><strong>GENERATE</strong></li>
                             </ul>
@@ -24,12 +24,17 @@
                             <fieldset>
                                 <div class="form-card">
                                     <h2 class="fs-title mb-5">SHIPMENT Information</h2>
-                                    <div class="col-3">
-                                        <label class="pay">SHIPMENT NAME(S#)</label>
+                                    <div class="row">
+                                        <div class="col-2"></div>
+                                        <div class="col-2">
+                                            <label class="pay">SHIPMENT NUMBER(S#)</label>
+                                        </div>
+                                        <div class="col-6">
+                                            <?php echo form_input(array('name' => 'name','class'=>"form-control", 'style'=>'border:solid !important;'));?>
+                                        </div>
+                                        <div class="col-2"></div>
                                     </div>
-                                    <div class="col-9">
-                                        <?php echo form_input(array('name' => 'name','placeholder'=>"S#"));?>
-                                    </div>
+                                    
                                     <!-- <input type="text" id= "name" name="name" placeholder="Folder Name"/> -->
                                     <div class="row mt-5">
                                         <div class="col-md-3">
@@ -56,7 +61,7 @@
                                         <div class="col-md-3">
                                             <div class="card bg-danger text-white mb-4">
                                                 <input class="file-upload" id="upload4" name="input_4_name[]" type="file" value="" multiple>
-                                                <p class="card-body" id="name4">Drag your extra file here or click in this area.
+                                                <p class="card-body" id="name4">Drag your extra files here or click in this area.
                                                 </p>
                                             </div>
                                         </div>

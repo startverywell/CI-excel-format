@@ -6,7 +6,7 @@
     <div class="col-md-6"></div>
     <div class="col-md-3"></div>
     <div class="col-md-3">
-        <a class="btn btn-primary" href="<?php site_url('/container/create')?>">
+        <a class="btn btn-primary" href="<?php echo site_url('/dragdrop/createOne')?>">
             <i class="fa-solid fa-plus" style="color: #40f000;"></i>
             Create Shipment
         </a>
@@ -39,17 +39,17 @@
                         echo '<td>
                             <a class="btn" href="'.site_url('/dragdrop/read/'.$shipData->id).'">
                                 <i class="fa-solid fa-eye" style="color: green;"></i> 
-                                Read
-                            </a> href="<?php echo ?>"
+                                READ
+                            </a> 
                             <a class="btn" href="'.site_url('/dragdrop/edit/'.$shipData->id).'">
                             <i class="fa-regular fa-pencil" style="color: red;"></i>
-                            Edit</a>
-                            <a class="btn" href="'.site_url('/billcheck/billone/'.$shipData->id).'">
-                            <i class="fa-regular fa-pencil" style="color: red;"></i>
-                            Files</a>
+                            EDIT</a>
                             <a class="btn" href="'.site_url('/dragdrop/delete/'.$shipData->id).'">
                             <i class="fa-regular fa-trash-can" style="color: red;"></i>
-                            Delete</a>
+                            DELETE</a>
+                            <a class="btn" href="'.site_url('/container/one/'.$shipData->id).'">
+                            <i class="fa-regular fa-star" style="color: blue;"></i>
+                            WIZARD</a>
                             </td>';
                         echo '</tr>';
                     }

@@ -20,7 +20,7 @@
                                 <li id="header_copy"><strong>HEADER COPY</strong></li>
                                 <li id="packing"><strong>ISL DETAIL</strong></li>
                                 <li id="container"><strong>CONTAINER/PACKING LIST</strong></li>
-                                <li id="confirm"><strong>CREATE QB BILL</strong></li>
+                                <li id="confirm"><strong>QB WORK</strong></li>
                                 <li id="confirm"><strong>REVIEW CONTAINERS</strong></li>
                                 <li id="download"><strong>GENERATE</strong></li>
                             </ul>
@@ -34,13 +34,13 @@
                                             <label class="pay">DATE ENTERED</label>
                                         </div>
                                         <div class="col-4">
-                                            <?php echo form_input(array('name' => 'date_entered','placeholder'=>"MM-DD-YYYY"));?>
+                                            <?php echo form_input(array('name' => 'date_entered','placeholder'=>"MM/DD/YYYY", 'id'=>'date_entered'));?>
                                         </div>
                                         <div class="col-2">
                                             <label class="pay">BILL/INV DATE</label>
                                         </div>
                                         <div class="col-4">
-                                            <?php echo form_input(array('name' => 'bill_date','placeholder'=>"MM-DD-YYYY"));?>
+                                            <?php echo form_input(array('name' => 'bill_date','placeholder'=>"MM-DD-YYYY", 'id'=>'bill_date'));?>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -54,7 +54,7 @@
                                             <label class="pay">DOCS RCVD DATE</label>
                                         </div>
                                         <div class="col-4">
-                                            <?php echo form_input(array('name' => 'docs_date','placeholder'=>"MM-DD-YYYY"));?>
+                                            <?php echo form_input(array('name' => 'docs_date','placeholder'=>"MM-DD-YYYY", 'id'=>'docs_date'));?>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -79,7 +79,7 @@
                                             <?php echo form_input(array('name' => 'carrier','placeholder'=>"CARRIER"));?>
                                         </div>
                                         <div class="col-2">
-                                            <label class="pay">Amount</label>
+                                            <label class="pay">Amount($)</label>
                                         </div>
                                         <div class="col-4">
                                             <?php echo form_input(array('name' => 'amount','placeholder'=>"Amount"));?>

@@ -165,4 +165,37 @@ class Upc extends CI_Controller {
         $this->Upc_model->importExcel($name.".".$extension);
         redirect('upc');
     }
+
+    public function pagenation()
+    {
+        $limitstart                = $this->uri->segment(3) ? $this->uri->segment(3) : 0;
+        $search = $_POST['sku_search'] ?? '';
+        $config['base_url']        = site_url('/upc/pagenation');
+        $config['total_rows']      = $this->Upc_model->record_count($search);
+        $config['per_page']        = 10;
+        $config["full_tag_open"]   = '<div class="pagination1 mt-3">';
+        $config["full_tag_close"]  = '</div>';
+        $config["first_tag_open"]  = '<a>';
+        $config["first_tag_close"] = '</a>';
+        $config["last_tag_open"]   = '<a>';
+        $config["last_tag_close"]  = '</li>';
+        $config["next_tag_open"]   = '<a>';
+        $config["next_tag_close"]  = '</a>';
+        $config["prev_tag_open"]   = '<a>';
+        $config["prev_tag_close"]  = '</a>';
+        $config["num_tag_open"]    = '<a>';
+        $config["num_tag_close"]   = '</a>';
+        $config["cur_tag_open"]    = '<a class="active1">';
+        $config["cur_tag_close"]   = '</a>';
+        $config['first_link']      = "Previous";
+        $config['last_link']       = "Next";
+        $this->pagination->initialize($config);
+        $this->data["paginetionlinks"] = $this->pagination->create_links();
+        $this->data["returndata"]      = $this->Upc_model->run_query($limitstart,$config['per_page'],$search);
+        $this->data["search"] = $search;
+
+        $this->load->view('layout/header');
+		$this->load->view('upc/page', $this->data);
+		$this->load->view('layout/footer');
+    }
 }

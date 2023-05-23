@@ -14,6 +14,20 @@ class SkuList_model extends CI_Model {
 		$this->load->library('PHPExcel');
     }
 
+    public function record_count($search) {
+        $this->db->like('sku',$search,'both'); 
+		return $this->db->count_all('sku_list'); 
+	} 
+	//for general database query 
+	public function run_query($limitstart, $per_page, $search){ 
+        $this->db->select('*');
+        $this->db->from('sku_list');
+        $this->db->like('sku',$search,'both');
+        $this->db->limit($per_page, $limitstart); // Limit to 10 results, starting at row 6 (offset of 5)
+        $query = $this->db->get();
+        return $query->result();
+    } 
+
 	public function getIndex()
 	{
         $this->db->from('sku_list');
@@ -93,7 +107,14 @@ class SkuList_model extends CI_Model {
         if ($query->num_rows() > 0) {
             return true;
         } else {
-            return false;
+            $this->db->from('sku_list');
+            $this->db->where('sku', $sku.'-'.$qty);
+            $query = $this->db->get();
+            if ($query->num_rows() > 0) {
+            return true;
+            } else {
+                return false;
+            }
         }
     }
 

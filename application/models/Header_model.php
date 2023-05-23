@@ -114,6 +114,11 @@ class Header_model extends CI_Model {
     private function changeDate($date)
     {
         $dates = explode('-', $date);
-        return $dates[2].'-'.$dates['0'].'-'.$dates[1];
+        if(count($dates) == 3)
+            return $dates[2].'-'.$dates[0].'-'.$dates[1];
+        else{
+            $dates = explode('/', $date);
+            return $dates[2].'-'.$dates[0].'-'.$dates[1];
+        }
     }
 }

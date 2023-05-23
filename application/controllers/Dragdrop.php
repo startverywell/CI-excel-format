@@ -43,22 +43,37 @@ class Dragdrop extends CI_Controller {
 
 			$config['upload_path'] = './public/uploads/'.$name.'/'.$name.'/';
 			$config['allowed_types'] = 'xlsx|xls|pdf';
+			
+			$uploaded_file = $_FILES['input_1_name']['name'];
+   			$file_ext = pathinfo($uploaded_file, PATHINFO_EXTENSION);
 
+			$ship_data['input_1_name'] = 'Inv PO# XXX-XXX.'.$file_ext;
 			$this->load->library('upload', $config);
 			if (!$this->upload->do_upload('input_1_name')) {
 				$this->session->set_flashdata('msg_error', $this->upload->display_errors());
 				redirect('dragdrop/createone');
 			} 
+			rename($config['upload_path'].str_replace(' ', '_',$_FILES['input_1_name']['name']), $config['upload_path'].$ship_data['input_1_name']);
 
+			$uploaded_file = $_FILES['input_2_name']['name'];
+   			$file_ext = pathinfo($uploaded_file, PATHINFO_EXTENSION);
+
+			$ship_data['input_2_name'] = 'PL  PO# XXX-XXX.'.$file_ext;
 			if (!$this->upload->do_upload('input_2_name')) {
 				$this->session->set_flashdata('msg_error', $this->upload->display_errors());
 				redirect('dragdrop/createone');
-			} 
+			}
+			rename($config['upload_path'].str_replace(' ', '_',$_FILES['input_2_name']['name']), $config['upload_path'].$ship_data['input_2_name']);
 
+			$uploaded_file = $_FILES['input_3_name']['name'];
+   			$file_ext = pathinfo($uploaded_file, PATHINFO_EXTENSION);
+
+			$ship_data['input_3_name'] = 'BL# XXXXXXXXXXXXXXX.'.$file_ext;
 			if (!$this->upload->do_upload('input_3_name')) {
 				$this->session->set_flashdata('msg_error', $this->upload->display_errors());
 				redirect('dragdrop/createone');
 			} 
+			rename($config['upload_path'].str_replace(' ', '_',$_FILES['input_3_name']['name']), $config['upload_path'].$ship_data['input_3_name']);
 
 			if($_FILES['input_4_name']['name'] != NULL && $_FILES['input_4_name']['name'] != '') {
 				$countfiles = count($_FILES['input_4_name']['name']);
@@ -86,13 +101,7 @@ class Dragdrop extends CI_Controller {
 				// 	redirect('dragdrop/createone');
 				// } 
 			}
-			$ship_data = array(
-                'name'      => $name,
-				'input_1_name' => str_replace(' ','_', $_FILES['input_1_name']['name']),
-				'input_2_name' => str_replace(' ','_', $_FILES['input_2_name']['name']),
-				'input_3_name' => str_replace(' ','_', $_FILES['input_3_name']['name']),
-				// 'input_4_name' => $_FILES['input_4_name']['name'],
-            );
+			$ship_data['name'] = $name;
 			
 			if ($this->Shipment_model->createShipment($ship_data)  ) {
 				$this->session->set_flashdata('msg_noti', 'Success create Shipment');
@@ -179,7 +188,7 @@ class Dragdrop extends CI_Controller {
 	}
 
 	public function createone(){
-		$this->load->view('layout/header');
+        $this->load->view('layout/header');
 		$this->load->view('dragdrop/one');
 		$this->load->view('layout/footer');
 	}

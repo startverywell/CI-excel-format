@@ -63,4 +63,5 @@
             </tr>
         </tbody>
     </table>
+    <a class="btn btn-success" href="<?php echo site_url('/container/one/'.$detail->shipment_id)?>">Back</a>
 </div>

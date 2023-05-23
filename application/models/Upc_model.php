@@ -12,6 +12,21 @@ class Upc_model extends CI_Model {
 		$this->load->database();
         $this->load->helper('url');       
 		$this->load->library('PHPExcel');
+        $this->load->library('pagination');
+    }
+
+    public function record_count($search) {
+        $this->db->like('sku',$search,'both'); 
+		return $this->db->count_all('upc'); 
+	}
+	//for general database query 
+	public function run_query($limitstart, $per_page, $search){ 
+        $this->db->select('*');
+        $this->db->from('upc');
+        $this->db->like('sku',$search,'both');
+        $this->db->limit($per_page, $limitstart); // Limit to 10 results, starting at row 6 (offset of 5)
+        $query = $this->db->get();
+        return $query->result();
     }
 
 	public function getIndex()
@@ -26,7 +41,7 @@ class Upc_model extends CI_Model {
         }
     }
     public function createUpc($data)
-    {        
+    {
         $this->db->trans_start();
         $this->db->insert('upc', $data);
         $this->db->trans_complete();
@@ -170,8 +185,8 @@ class Upc_model extends CI_Model {
         //---SET DATA
         $row = 3;
         $blank_count = 0;
-        while ($objPHPExcel->getActiveSheet()->getCell('B'.$row)->getValue() != '' && $blank_count < 9) {
-            if($objPHPExcel->getActiveSheet()->getCell('B'.$row)->getValue() == '' ){
+        while ($objPHPExcel->getActiveSheet()->getCell('D'.$row)->getValue() != '' && $objPHPExcel->getActiveSheet()->getCell('D'.$row)->getValue() != NULL && $blank_count < 9) {
+            if($objPHPExcel->getActiveSheet()->getCell('D'.$row)->getValue() == '' || $objPHPExcel->getActiveSheet()->getCell('D'.$row)->getValue() != NULL ){
                 $blank_count++;
                 $row++;
                 continue;
@@ -179,15 +194,14 @@ class Upc_model extends CI_Model {
                 $blank_count = 0;
             }
             $pl = [];
-            $pl['sku'] = $objPHPExcel->getActiveSheet()->getCell('D'.$row)->getValue();
+            $pl['sku'] = $objPHPExcel->getActiveSheet()->getCell('D'.$row)->getValue() ?? '';
 
             if(!$this->checkUpcBySku($pl['sku'])){
-                $pl['upc'] = $objPHPExcel->getActiveSheet()->getCell('F'.$row)->getValue();
+                $pl['upc'] = $objPHPExcel->getActiveSheet()->getCell('F'.$row)->getValue() ?? '';
                 $this->createUpc($pl);
             }
             $row++;
         }
-        var_export($row); die;
         return true;
     }
 }

@@ -9,6 +9,7 @@
     }
 
     $po_name = implode('-', $pos);
+    $po_name1 = implode('/', $pos);
 ?>
 
 <link rel="stylesheet" href="<?php echo base_url();?>public/css/one.css">
@@ -30,7 +31,7 @@
                                 <li id="header_copy"><strong>HEADER COPY</strong></li>
                                 <li id="packing"><strong>ISL DETAIL</strong></li>                           
                                 <li id="container"><strong>CONTAINER/PACKING LIST</strong></li>
-                                <li class="active" id="confirm"><strong>CONFIRM QB BILL CREATED</strong></li>
+                                <li class="active" id="confirm"><strong>QB WORK</strong></li>
                                 <li id="confirm"><strong>REVIEW CONTAINERS</strong></li>
                                 <li id="download"><strong>GENERATE</strong></li>
                             </ul>
@@ -99,10 +100,13 @@
                                                     <?php echo ($header->po_check==1 ? '<i class="fa-solid fa-check" style="color: #2df41f;"></i>' :'<i class="fa-solid fa-xmark" style="color: red;"></i>'); ?>
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td colspan="2"></td>
+                                            </tr>
                                             <tr class="table-danger">
                                                 <td>PO# </td>
                                                 <td>
-                                                    <?php echo $po_name; ?>
+                                                    <?php echo $po_name.'   :   '.$po_name1; ?>
                                                 </td>
                                             </tr>
                                         </tbody>

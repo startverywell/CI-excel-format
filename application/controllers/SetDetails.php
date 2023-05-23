@@ -116,19 +116,17 @@ class Setdetails extends CI_Controller {
             4 => 'multi_top',
             5 => 'description',
             6 => 'description2',
-            7 => 'hts',
-            8 => 'ctn',
-            9 => 'total',
-            10 => 'uom',
-            11 => 'rcvd',
-            12 => 'notes',
-            13 => 'upc',
-            14 => 'length',
-            15 => 'width',
-            16 => 'height',
-            17 => 'weight',
-            18 => 'cbm',
-            19 => 'price'
+            7 => 'ctn',
+            8 => 'total',
+            9 => 'uom',
+            10 => 'notes',
+            11 => 'upc',
+            12 => 'length',
+            13 => 'width',
+            14 => 'height',
+            15 => 'weight',
+            16 => 'cbm',
+            17 => 'price'
         ];
 
         $container_id = $this->input->post('container_id');
@@ -166,28 +164,31 @@ class Setdetails extends CI_Controller {
                 }
 
                 if($detail_data['single_top'] == 1 || $detail_data['multi_top'] == 1){
-                    $sku = $detail_data['notes'] ?? '';
+                    $sku = $detail_data['style'] ?? '';
                     $qty = $detail_data['ctn'] ?? '';
                 } else if($detail_data['asst'] == 1) {
                     $sku = $detail_data['style'] ?? '';
                     $qty = $detail_data['pcs_carton'] ?? '';
+                    $sku_check = 1;
                 }
                 else {
                     $sku = $detail_data['style'] ?? '';
-                    $qty = $detail_data['total'] ?? '';
+                    $qty = $detail_data['ctn'] ?? '';
+                    $sku_check = $detail_data['pcs_carton'];
                 }
 
                 $upc = $this->Upc_model->getUpcBySku($sku)[0];
                 $detail_data['upc'] = $upc->upc ?? '';
 
-                if(!$this->SkuList_model->checkSku($sku, $qty)){
+                if(!$this->SkuList_model->checkSku($sku, $sku_check) && $detail_data['single_top'] == 0 && $detail_data['multi_top'] == 0){
                     $detail_data['pl_new'] = 1;
                     $detail_data['pl_add_flag'] = 1;
 
                     // ADD 3PL LIST
                     $pl = [];
                     // check name
-                    $pl['sku'] = $this->SkuList_model->checkSkuName($sku) ? $sku.'-'.$qty : $sku;
+                    $pl['sku'] = $this->SkuList_model->checkSkuName($sku) ? $sku.'-'.$sku_check : $sku;
+                    $detail_data['style'] = $pl['sku'];
                     $pl['description'] = $detail_data['description'];
                     $pl['description2'] = $detail_data['description2'];
                     $pl['qty'] = $detail_data['pcs_carton'];
@@ -198,7 +199,6 @@ class Setdetails extends CI_Controller {
                     $pl['height'] = $detail_data['height'];
                     $pl['weight'] = $detail_data['weight']; 
                     $this->SkuList_model->createSkuList($pl);
-
                 }
                 $this->Details_model->createDetails($detail_data);
                 $detail_data = [];
@@ -220,19 +220,17 @@ class Setdetails extends CI_Controller {
             4 => 'multi_top',
             5 => 'description',
             6 => 'description2',
-            7 => 'hts',
-            8 => 'ctn',
-            9 => 'total',
-            10 => 'uom',
-            11 => 'rcvd',
-            12 => 'notes',
-            13 => 'upc',
-            14 => 'length',
-            15 => 'width',
-            16 => 'height',
-            17 => 'weight',
-            18 => 'cbm',
-            19 => 'price'
+            7 => 'ctn',
+            8 => 'total',
+            9 => 'uom',
+            10 => 'notes',
+            11 => 'upc',
+            12 => 'length',
+            13 => 'width',
+            14 => 'height',
+            15 => 'weight',
+            16 => 'cbm',
+            17 => 'price'
         ];
         $container_id = $this->input->post('container_id');
         $shipment_id = ($this->Container_model->getContainer($container_id)[0])->shipment_id;
@@ -269,28 +267,31 @@ class Setdetails extends CI_Controller {
                 }
 
                 if($detail_data['single_top'] == 1 || $detail_data['multi_top'] == 1){
-                    $sku = $detail_data['notes'] ?? '';
+                    $sku = $detail_data['style'] ?? '';
                     $qty = $detail_data['ctn'] ?? '';
                 } else if($detail_data['asst'] == 1) {
                     $sku = $detail_data['style'] ?? '';
                     $qty = $detail_data['pcs_carton'] ?? '';
+                    $sku_check = 1;
                 }
                 else {
                     $sku = $detail_data['style'] ?? '';
-                    $qty = $detail_data['total'] ?? '';
+                    $qty = $detail_data['ctn'] ?? '';
+                    $sku_check = $detail_data['pcs_carton'];
                 }
 
                 $upc = $this->Upc_model->getUpcBySku($sku)[0];
                 $detail_data['upc'] = $upc->upc ?? '';
 
-                if(!$this->SkuList_model->checkSku($sku, $qty)){
+                if(!$this->SkuList_model->checkSku($sku, $sku_check) && $this->input->post('single_top') == 0 && $this->input->post('multi_top') == 0 && $this->input->post('single_top') == 0 && $this->input->post('multi_top') == 0){
                     $detail_data['pl_new'] = 1;
                     $detail_data['pl_add_flag'] = 1;
 
                     // ADD 3PL LIST
                     $pl = [];
                     // check name
-                    $pl['sku'] = $this->SkuList_model->checkSkuName($sku) ? $sku.'-'.$qty : $sku;
+                    $pl['sku'] = $this->SkuList_model->checkSkuName($sku) ? $sku.'-'.$detail_data['pcs_carton'] : $sku;
+                    $detail_data['style'] = $pl['sku'];
                     $pl['description'] = $detail_data['description'];
                     $pl['description2'] = $detail_data['description2'];
                     $pl['qty'] = $detail_data['pcs_carton'];
@@ -341,9 +342,10 @@ class Setdetails extends CI_Controller {
                 }
                 else {
                     $sku = $this->input->post('style') ?? '';
-                    $qty = $this->input->post('total') ?? '';
+                    $qty = $this->input->post('ctn') ?? '';
                 }
-                if(!$this->SkuList_model->checkSku($sku, $qty)){
+
+                if(!$this->SkuList_model->checkSku($sku, $qty) && $this->input->post('single_top') == 0 && $this->input->post('multi_top') == 0){
                     $this->Details_model->updateDetails(['pl_new'=>1], $id);
                     $this->Details_model->updateDetails(['pl_add_flag'=>1], $id);
                     // ADD 3PL LIST
@@ -374,7 +376,7 @@ class Setdetails extends CI_Controller {
                 $this->session->set_flashdata('msg_noti', 'Success update Detail');
                 $header = $this->Header_model->getHeaderbyShipID($shipment_id)[0];
                 // echo 'billcheck/pocheck/'.$header->id;
-                redirect('billcheck/pocheck/'.$header->id);
+                redirect('setdetails/edit/'.$container_id);
             } else {
                 $this->session->set_flashdata('msg_error', 'save error');
                 redirect('setdetails/updateView/'.$id);

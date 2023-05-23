@@ -6,9 +6,9 @@ window.onload = function () {
     const exampleParent = document.querySelector('#exampleParent');
 
     // generate an array of arrays with dummy data
-    const data = new Array(20) // number of rows
+    const data = new Array(100) // number of rows
     .fill()
-    .map((_, row) => new Array(20) // number of columns
+    .map((_, row) => new Array(18) // number of columns
         .fill()
         .map((_, column) => ``)
     );
@@ -16,12 +16,13 @@ window.onload = function () {
     const hot = new Handsontable(example, {
         data,
         rowHeaders: true,
-        colHeaders: ['PO#', 'STYLE','ASST','ST', 'MT', 'DESCRIPTION', 'DESCRIPTION2', 'HTS', 'CTN', 'TOTAL', 'UOM','RCVD', 'NOTES', 'UPC' ,'Length', 'Width', 'Height', 'Weight', 'CBM', 'Price'],
+        colHeaders: ['PO#', 'STYLE','ASST','ST', 'MT', 'DESCRIPTION', 'DESCRIPTION2', 'CTN', 'TOTAL', 'UOM', 'NOTES', 'UPC' ,'Length', 'Width', 'Height', 'Weight', 'CBM', 'Price'],
         width: '100%',
         height: 'auto',
         // height: '100%',
         rowHeights: 23,
-        colWidths: 100,
+        colWidths: [100, 100, 40, 40, 40, 250, 200 , 100,100,100,100,100,100,100,100,100,undefined],
+        noWordWrapClassName: 'is-noWrapCell',
         columns: [
             {
                 type: 'text'
@@ -39,16 +40,12 @@ window.onload = function () {
                 type: 'checkbox'
             },
             {
-                type: 'text'
+                type: 'text',
+                wordWrap: false,
             },
             {
-                type: 'text'
-            },
-            {
-                type: 'text'
-            },
-            {
-                type: 'text'
+                type: 'text',
+                wordWrap: false,
             },
             {
                 type: 'text'

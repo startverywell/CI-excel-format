@@ -21,7 +21,7 @@
                                 <li id="header_copy"><strong>HEADER COPY</strong></li>
                                 <li id="packing"><strong>ISL DETAIL</strong></li>
                                 <li id="container"><strong>CONTAINER/PACKING LIST</strong></li>
-                                <li id="confirm"><strong>CONFIRM QB BILL CREATED</strong></li>
+                                <li id="confirm"><strong>QB WORK</strong></li>
                                 <li class="active" id="confirm"><strong>REVIEW CONTAINERS</strong></li>
                                 <li id="download"><strong>GENERATE</strong></li>
                             </ul>
@@ -53,7 +53,7 @@
                                             <tbody>
                                             <?php 
                                                 $no = 1;
-                                                $pos = [];
+                                                
                                                 if ($details != false) {
                                                     foreach ($details as $detali) {
 
@@ -93,18 +93,17 @@
                                                                 </a>
                                                             </td>';
                                                         echo '</tr>';
-                                                        if($detali->po != '')
-                                                            $pos[$detali->po] = $detali->po;
+                                                        
                                                     }
                                                 }
 
-                                                $po_name = implode('-', $pos);
+                                                
                                             ?>
                                             </tbody>
                                         </table>
                                         <!-- /.DataTable -->
                                     </div>
-                                    <h4 style="text-align:center;">PO#: <label style="color:red;"><?php echo $po_name?> </label></h4>
+                                    
                                 </div>
                                 <a type="button" class="previous action-button-previous" href="<?php echo site_url('/billcheck/billone/'.$header->shipment_id)?>">Previous</a>
                                 <input type="submit" class="action-button" id="check_bill"  value="CREATE"/>
